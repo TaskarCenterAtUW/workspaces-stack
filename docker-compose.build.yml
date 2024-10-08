@@ -1,0 +1,57 @@
+services:
+  frontend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${WS_DOCKER_TAG}
+    build:
+      context: frontend
+      args:
+        VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
+        VITE_API_URL: ${WS_API_URL}
+        VITE_OSM_URL: ${WS_OSM_URL}
+        VITE_RAPID_URL: ${WS_RAPID_URL}
+
+  rapid:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
+    build:
+      context: rapid
+
+  osm-log-proxy:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${WS_DOCKER_TAG}
+    build:
+      context: osm-log-proxy
+
+  osm-web:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${WS_DOCKER_TAG}
+    build:
+      context: osm-web
+
+  osm-rails:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${WS_DOCKER_TAG}
+    build:
+      context: osm-rails
+      dockerfile: Dockerfile.prod
+
+  osm-cgimap:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${WS_DOCKER_TAG}
+    build:
+      context: osm-cgimap
+      dockerfile: docker/ubuntu/Dockerfile2404
+
+  tasks-frontend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
+    build:
+      context: tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.frontend
+      args:
+        TM_APP_API_URL: ${WS_TASKS_URL}
+        #TM_CONSUMER_KEY
+        #TM_CONSUMER_SECRET
+
+
+  tasks-backend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+    build:
+      context: tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.backend
+      target: prod
+      args:
+        APP_UID: 1000

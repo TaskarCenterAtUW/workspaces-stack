@@ -1,0 +1,164 @@
+name: tdei-workspaces
+
+################################################################################
+
+x-osm-rails-base:
+  &osm-rails-base
+  build:
+    context: osm-rails
+  env_file: .env
+  volumes:
+    - ./osm-rails:/app
+    # Prevent these directories from mounting so they're not shared between
+    # host OS and Docker:
+    - /app/node_modules/
+    - osm-rails-tmp:/app/tmp
+    - osm-rails-storage:/app/storage
+
+################################################################################
+
+services:
+  dev-proxy:
+    image: traefik:latest
+    ports:
+      - "${WS_DEV_PORT}:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - --entrypoints.web.address=:80
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+
+  frontend:
+    image: node:latest
+    entrypoint: npm
+    command: run dev
+    user: node
+    working_dir: /app
+    tty: true
+    environment:
+      VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
+      VITE_API_URL: ${WS_API_URL}
+      VITE_OSM_URL: ${WS_OSM_URL}
+      VITE_RAPID_URL: ${WS_RAPID_URL}
+    volumes:
+      - ./frontend:/app
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`${WS_FRONTEND_HOST}`)
+      - traefik.http.services.frontend.loadbalancer.server.port=3000
+
+  #api:
+    # Workspaces backend currently exists in the Tasking Manager backend. See
+    # the tasks-backend service below.
+
+  rapid:
+    image: node:latest
+    entrypoint: npm
+    user: node
+    working_dir: /app
+    tty: true
+    volumes:
+      - ./rapid:/app
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.cors.headers.accesscontrolallowmethods=*
+      - traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=*
+      - traefik.http.middlewares.cors.headers.accesscontrolmaxage=100
+      - traefik.http.middlewares.cors.headers.addvaryheader=true
+      - traefik.http.routers.rapid.rule=Host(`${WS_RAPID_HOST}`)
+      - traefik.http.routers.rapid.middlewares=cors
+      - traefik.http.services.rapid.loadbalancer.server.port=8080
+
+  osm-log-proxy:
+    image: nginx:latest
+    volumes:
+      - ./nginx.debug.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - osm-web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.osm-log-proxy.rule=Host(`${WS_OSM_HOST}`)
+      - traefik.http.services.osm-log-proxy.loadbalancer.server.port=80
+
+  osm-web:
+    image: rtsp/lighttpd:latest
+    depends_on:
+      - osm-rails
+      - osm-cgimap
+    volumes:
+      - ./osm-web/lighttpd.conf:/etc/lighttpd/conf.d/06-osm.conf:ro
+      - ./osm-rails/public:/var/www/html:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.osm-web.rule=Host(`${WS_OSM_HOST}`)
+      - traefik.http.services.osm-web.loadbalancer.server.port=80
+
+  osm-rails:
+    <<: *osm-rails-base
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    environment:
+      PIDFILE: /tmp/pids/server.pid
+    tmpfs: /tmp/pids/
+
+  osm-rails-worker:
+    <<: *osm-rails-base
+    command: bundle exec rake jobs:work
+
+  osm-cgimap:
+    build:
+      context: osm-cgimap
+      dockerfile: docker/ubuntu/Dockerfile2404
+    environment:
+      CGIMAP_HOST: ${WS_OSM_DB_HOST}
+      CGIMAP_USERNAME: ${WS_OSM_DB_USER}
+      CGIMAP_PASSWORD: ${WS_OSM_DB_PASS}
+      CGIMAP_DBNAME: ${WS_OSM_DB_NAME}
+      CGIMAP_MAX_CHANGESET_ELEMENTS: ${WS_OSM_MAX_CHANGESET_ELEMENTS}
+      CGIMAP_MAX_PAYLOAD: ${WS_OSM_MAX_UPLOAD_BYTES}
+      CGIMAP_MAP_NODES: ${WS_OSM_MAX_EXPORT_NODES}
+      CGIMAP_MAP_AREA: ${WS_OSM_MAX_EXPORT_AREA}
+
+  tasks-frontend:
+    build:
+      context: tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.frontend
+    volumes:
+      - ./tasking-manager:/usr/src/app
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tasks-frontend.rule=Host(`${WS_TASKS_HOST}`)
+      - traefik.http.services.tasks-frontend.loadbalancer.server.port=80
+
+  tasks-backend:
+    build:
+      context: tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.backend
+      target: debug
+      args:
+        APP_UID: 1000
+    env_file: tasking-manager/tasking-manager.env
+    environment:
+      GEVENT_SUPPORT: true
+    ports:
+      - "5678:5678" # debugpy debugger port
+    volumes:
+      - ./tasking-manager:/usr/src/app
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tasks-backend.rule=Host(`${WS_TASKS_HOST}`) && PathPrefix(`/api/`)
+      - traefik.http.routers.tasks-backend.service=tasks-backend
+      - traefik.http.services.tasks-backend.loadbalancer.server.port=5000
+      # Workspaces backend currently lives in the TM. Emulate a separate server for now:
+      - traefik.http.middlewares.workspaces-backend-emulation.replacepathregex.regex=^/api/v1/(.*)
+      - traefik.http.middlewares.workspaces-backend-emulation.replacepathregex.replacement=/api/v2/$$1/
+      - traefik.http.routers.workspaces-backend.rule=Host(`${WS_API_HOST}`)
+      - traefik.http.routers.workspaces-backend.service=workspaces-backend
+      - traefik.http.services.workspaces-backend.loadbalancer.server.port=5000
+      - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation
+
+volumes:
+  osm-rails-tmp:
+  osm-rails-storage:
+  osm-rails-db-data:

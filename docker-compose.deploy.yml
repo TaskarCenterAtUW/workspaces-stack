@@ -1,0 +1,193 @@
+################################################################################
+
+x-osm-rails-base:
+  &osm-rails-base
+  image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${WS_DOCKER_TAG}
+  restart: always
+  environment:
+    RAILS_ENV: production
+    SECRET_KEY_BASE: ${WS_OSM_SECRET_KEY_BASE}
+    WS_OSM_HOST: ${WS_OSM_HOST}
+    WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+    WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+    WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+    WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
+    WS_MAIL_NAME: ${WS_MAIL_NAME}
+    WS_MAIL_FROM: ${WS_MAIL_FROM}
+    WS_MAIL_CONTACT: ${WS_MAIL_CONTACT}
+    WS_MAIL_RETURN_PATH: ${WS_MAIL_RETURN_PATH}
+    WS_SMTP_DOMAIN: ${WS_SMTP_DOMAIN}
+    WS_SMTP_HOST: ${WS_SMTP_HOST}
+    WS_SMTP_PORT: ${WS_SMTP_PORT}
+    WS_SMTP_USER: ${WS_SMTP_USER}
+    WS_SMTP_PASS: ${WS_SMTP_PASS}
+    PIDFILE: /tmp/pids/server.pid
+  volumes:
+    - osm-rails-tmp:/app/tmp
+    - osm-rails-storage:/app/storage
+  tmpfs: /tmp/pids/
+
+################################################################################
+
+services:
+  reverse-proxy:
+    image: traefik:v3.1
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/traefik/acme.json:/letsencrypt/acme.json
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.transport.respondingTimeouts.readTimeout=0s
+      - --entrypoints.websecure.transport.respondingTimeouts.writeTimeout=0s
+      - --entrypoints.websecure.transport.respondingTimeouts.idleTimeout=600s
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      - --certificatesresolvers.myresolver.acme.email=${WS_MAIL_ACME}
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+
+  frontend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${WS_DOCKER_TAG}
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`${WS_FRONTEND_HOST}`)
+      - traefik.http.services.frontend.loadbalancer.server.port=80
+      - traefik.http.routers.frontend.entrypoints=websecure
+      - traefik.http.routers.frontend.tls.certresolver=myresolver
+
+  backend:
+    # Workspaces backend currently lives in the TM. Emulate a separate server for now:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+    restart: always
+    env_file: tasking-manager/tasking-manager.env
+    environment:
+      GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.workspaces-backend-emulation.replacepathregex.regex=^/api/v1/(.*)
+      - traefik.http.middlewares.workspaces-backend-emulation.replacepathregex.replacement=/api/v2/$$1/
+      - traefik.http.routers.workspaces-backend.rule=Host(`${WS_API_HOST}`)
+      - traefik.http.services.workspaces-backend.loadbalancer.server.port=5000
+      - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation
+      - traefik.http.routers.workspaces-backend.entrypoints=websecure
+      - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
+
+  rapid:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.cors.headers.accesscontrolallowmethods=*
+      - traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=*
+      - traefik.http.middlewares.cors.headers.accesscontrolmaxage=100
+      - traefik.http.middlewares.cors.headers.addvaryheader=true
+      - traefik.http.routers.rapid.rule=Host(`${WS_RAPID_HOST}`)
+      - traefik.http.routers.rapid.middlewares=cors
+      - traefik.http.services.rapid.loadbalancer.server.port=80
+      - traefik.http.routers.rapid.entrypoints=websecure
+      - traefik.http.routers.rapid.tls.certresolver=myresolver
+
+  osm-log-proxy:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${WS_DOCKER_TAG}
+    depends_on:
+      - osm-web
+        #labels:
+        #  - traefik.enable=true
+        #  - traefik.http.routers.osm-log-proxy.rule=Host(`${WS_OSM_HOST}`)
+        #  - traefik.http.services.osm-log-proxy.loadbalancer.server.port=80
+        #  - traefik.http.routers.osm-log-proxy.entrypoints=websecure
+        #  - traefik.http.routers.osm-log-proxy.tls.certresolver=myresolver
+
+  osm-web:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${WS_DOCKER_TAG}
+    restart: always
+    depends_on:
+      - osm-rails
+      - osm-cgimap
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.osm-web.rule=Host(`${WS_OSM_HOST}`)
+      - traefik.http.services.osm-web.loadbalancer.server.port=80
+      - traefik.http.routers.osm-web.entrypoints=websecure
+      - traefik.http.routers.osm-web.tls.certresolver=myresolver
+
+  osm-web-old:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${WS_DOCKER_TAG}
+    restart: always
+    depends_on:
+      - osm-rails
+      - osm-cgimap
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.osm-web-old.rule=Host(`${WS_OLD_OSM_HOST}`)
+      - traefik.http.services.osm-web-old.loadbalancer.server.port=80
+      - traefik.http.routers.osm-web-old.entrypoints=websecure
+      - traefik.http.routers.osm-web-old.tls.certresolver=myresolver
+
+  osm-rails:
+    <<: *osm-rails-base
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+
+  osm-rails-worker:
+    <<: *osm-rails-base
+    command: bundle exec rake jobs:work
+
+  osm-cgimap:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${WS_DOCKER_TAG}
+    restart: always
+    environment:
+      CGIMAP_HOST: ${WS_OSM_DB_HOST}
+      CGIMAP_USERNAME: ${WS_OSM_DB_USER}
+      CGIMAP_PASSWORD: ${WS_OSM_DB_PASS}
+      CGIMAP_DBNAME: ${WS_OSM_DB_NAME}
+      CGIMAP_MAX_CHANGESET_ELEMENTS: ${WS_OSM_MAX_CHANGESET_ELEMENTS}
+      CGIMAP_MAX_PAYLOAD: ${WS_OSM_MAX_UPLOAD_BYTES}
+      CGIMAP_MAP_NODES: ${WS_OSM_MAX_EXPORT_NODES}
+      CGIMAP_MAP_AREA: ${WS_OSM_MAX_EXPORT_AREA}
+
+  tasks-frontend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tasks-frontend.rule=Host(`${WS_TASKS_HOST}`)
+      - traefik.http.services.tasks-frontend.loadbalancer.server.port=80
+      - traefik.http.routers.tasks-frontend.entrypoints=websecure
+      - traefik.http.routers.tasks-frontend.tls.certresolver=myresolver
+
+  tasks-backend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+    restart: always
+    env_file: tasking-manager/tasking-manager.env
+    environment:
+      GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tasks-backend.rule=Host(`${WS_TASKS_HOST}`) && PathPrefix(`/api/`)
+      - traefik.http.services.tasks-backend.loadbalancer.server.port=5000
+      - traefik.http.routers.tasks-backend.entrypoints=websecure
+      - traefik.http.routers.tasks-backend.tls.certresolver=myresolver
+
+  tasks-backend-old:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+    restart: always
+    env_file: tasking-manager/tasking-manager.env
+    environment:
+      GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tasks-backend-old.rule=Host(`${WS_OLD_TASKS_HOST}`) && PathPrefix(`/api/`)
+      - traefik.http.services.tasks-backend-old.loadbalancer.server.port=5000
+      - traefik.http.routers.tasks-backend-old.entrypoints=websecure
+      - traefik.http.routers.tasks-backend-old.tls.certresolver=myresolver
+
+volumes:
+  osm-rails-tmp:
+  osm-rails-storage:
