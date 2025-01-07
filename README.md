@@ -29,3 +29,7 @@ Replace XXX.env with the environment definition file of the environment for whic
 ```docker-compose -f docker-compose.deploy.yml --env-file XXX.env up -d -pull always --force-recreate --remove-orphans```
 
 Replace XXX.env with the environment definition file of the environment for which you are deploying.
+
+# Other Files
+
+* ```example.env```: template of the .env file required by the Docker compose YAML files
