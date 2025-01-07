@@ -46,7 +46,6 @@ services:
         #TM_CONSUMER_KEY
         #TM_CONSUMER_SECRET
 
-
   tasks-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
     build:

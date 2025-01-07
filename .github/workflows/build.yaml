@@ -1,0 +1,25 @@
+name: "Build Images"
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test Workflow'      
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Image Build 
+    timeout-minutes: 45
+    steps:
+	  - uses: actions/checkout@v2
+    
+      - name: Set commit SHA
+	    run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+    
+      - name: Build the stack
+        run: docker-compose -f docker-compose.build.yml -env example.env build
+    
