@@ -16,7 +16,6 @@ jobs:
     timeout-minutes: 45
     steps:
 	  - uses: actions/checkout@v2
-    
       - name: Set commit SHA
 	    run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
     
