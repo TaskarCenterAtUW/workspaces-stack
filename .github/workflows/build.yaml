@@ -19,5 +19,5 @@ jobs:
         - name: Set commit SHA
           run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
         - name: Build the stack
-          run: docker compose -f docker-compose.build.yml --env-file example.env --build-arg GITHUB_SHORT_SHA=${GITHUB_SHA} build
+          run: docker compose -f docker-compose.build.yml --env-file example.env build --build-arg GITHUB_SHORT_SHA=${GITHUB_SHA}
     
