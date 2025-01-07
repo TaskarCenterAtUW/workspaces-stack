@@ -11,13 +11,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
     name: Image Build 
     timeout-minutes: 45
     steps:
-	  - uses: actions/checkout@v2
-      - name: Set commit SHA
-	    run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
-      - name: Build the stack
-        run: docker-compose -f docker-compose.build.yml -env example.env build
+        - uses: actions/checkout@v2
+        - name: Set commit SHA
+          run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+        - name: Build the stack
+          run: docker-compose -f docker-compose.build.yml -env example.env build
     
