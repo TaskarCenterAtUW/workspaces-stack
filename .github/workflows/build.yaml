@@ -35,7 +35,7 @@ jobs:
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Push the stack to ACR
-          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env push
+          run: docker compose --env-file tdei_uw.env push
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
