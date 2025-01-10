@@ -10,6 +10,8 @@ on:
         description: 'Test Workflow'      
 
 jobs:
+  environment: dev
+
   build:
     runs-on: ubuntu-latest 
     name: Image Build 
