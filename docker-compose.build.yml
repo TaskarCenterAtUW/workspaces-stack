@@ -11,31 +11,61 @@ services:
         VITE_RAPID_URL: ${WS_RAPID_URL}
         VITE_PATHWAYS_EDITOR_URL: ${WS_PATHWAYS_EDITOR_URL}
 
+  frontend_tag:
+    extends: frontend
+    image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}
+
+
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
     build:
       context: rapid
+
+  rapid_tag:
+    extends: rapid
+    image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${CODE_VERSION}
+
 
   pathways-editor:
     image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${WS_DOCKER_TAG}
     build:
       context: pathways-editor
 
+  pathways-editor_tag:
+    extends: pathways-editor
+    image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${CODE_VERSION}
+
+
   osm-log-proxy:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${WS_DOCKER_TAG}
     build:
       context: osm-log-proxy
+
+  osm-log-proxy_tag:
+    extends: osm-log-proxy
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${CODE_VERSION}
+
 
   osm-web:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${WS_DOCKER_TAG}
     build:
       context: osm-web
 
+  osm-web_tag:
+    extends: osm-web
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${CODE_VERSION}
+
+
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${WS_DOCKER_TAG}
     build:
       context: osm-rails
       dockerfile: Dockerfile.prod
+      
+  osm-rails_tag:
+    extends: osm-rails
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${CODE_VERSION}
+
 
   osm-cgimap:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${WS_DOCKER_TAG}
@@ -43,21 +73,26 @@ services:
       context: osm-cgimap
       dockerfile: docker/ubuntu/Dockerfile2404
 
-  tasks-frontend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
-    build:
-      context: tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.frontend
-      args:
-        TM_APP_API_URL: ${WS_TASKS_URL}
-        #TM_CONSUMER_KEY
-        #TM_CONSUMER_SECRET
+  osm-cgimap_tag:
+    extends: osm-cgimap
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
-  tasks-backend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
-    build:
-      context: tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.backend
-      target: prod
-      args:
-        APP_UID: 1000
+
+#  tasks-frontend:
+#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
+#    build:
+#      context: tasking-manager
+#      dockerfile: ./scripts/docker/Dockerfile.frontend
+#      args:
+#        TM_APP_API_URL: ${WS_TASKS_URL}
+#        #TM_CONSUMER_KEY
+#        #TM_CONSUMER_SECRET
+
+#  tasks-backend:
+#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+#    build:
+#      context: tasking-manager
+#      dockerfile: ./scripts/docker/Dockerfile.backend
+#      target: prod
+#      args:
+#        APP_UID: 1000

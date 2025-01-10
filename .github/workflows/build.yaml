@@ -16,8 +16,11 @@ jobs:
     timeout-minutes: 45
     steps:
         - uses: actions/checkout@v2
-        - name: Set commit SHA
-          run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
+        - name: Set commit SHA as code version
+          run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
         - name: Build the stack
-          run: docker compose -f docker-compose.build.yml --env-file example.env build --build-arg GITHUB_SHORT_SHA=${GITHUB_SHA}
+          run: docker compose -f docker-compose.build.yml --env-file example.env build --build-arg CODE_VERSION=${CODE_VERSION}
+
     
