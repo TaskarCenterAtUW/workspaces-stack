@@ -33,6 +33,8 @@ jobs:
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
+
+              # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
               WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
               WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
@@ -42,10 +44,12 @@ jobs:
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
 
         - name: Push the stack to ACR
-          run: docker compose --env-file tdei_uw.env push
+          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env push
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
+
+              # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
               WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
               WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
