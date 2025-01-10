@@ -20,11 +20,10 @@
 # To build images
 
 ```git clone --recursive https://github.com/TaskarCenterAtUW/workspaces-stack.git```
-
 ```docker-compose -f docker-compose.build.yml --env-file XXX.env build```
+```docker-compose -f docker-compose.build.yml --env-file XXX.env push```
 
 Replace XXX.env with the environment definition file of the environment for which you want to build an image. This can be overridden when running (see below). 
-
 
 # To update docker daemon to run with latest images
 
