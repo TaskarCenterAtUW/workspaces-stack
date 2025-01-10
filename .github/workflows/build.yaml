@@ -30,9 +30,15 @@ jobs:
 
         - name: Build the stack
           run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
+          env:
+              ENV: ${{ vars.ENV }}
+              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Push the stack to ACR
           run: docker compose --env-file tdei_uw.env push
+          env:
+              ENV: ${{ vars.ENV }}
+              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
     
     
