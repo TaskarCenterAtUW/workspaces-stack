@@ -5,14 +5,21 @@ services:
       context: frontend
       args:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
+        VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
         VITE_API_URL: ${WS_API_URL}
         VITE_OSM_URL: ${WS_OSM_URL}
         VITE_RAPID_URL: ${WS_RAPID_URL}
+        VITE_PATHWAYS_EDITOR_URL: ${WS_PATHWAYS_EDITOR_URL}
 
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
     build:
       context: rapid
+
+  pathways-editor:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${WS_DOCKER_TAG}
+    build:
+      context: pathways-editor
 
   osm-log-proxy:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${WS_DOCKER_TAG}

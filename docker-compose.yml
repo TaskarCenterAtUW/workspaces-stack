@@ -39,9 +39,11 @@ services:
     tty: true
     environment:
       VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
+      VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
       VITE_API_URL: ${WS_API_URL}
       VITE_OSM_URL: ${WS_OSM_URL}
       VITE_RAPID_URL: ${WS_RAPID_URL}
+      VITE_PATHWAYS_EDITOR_URL: ${WS_PATHWAYS_EDITOR_URL}
     volumes:
       - ./frontend:/app
     labels:
@@ -56,6 +58,7 @@ services:
   rapid:
     image: node:latest
     entrypoint: npm
+    command: run start
     user: node
     working_dir: /app
     tty: true
@@ -70,6 +73,25 @@ services:
       - traefik.http.routers.rapid.rule=Host(`${WS_RAPID_HOST}`)
       - traefik.http.routers.rapid.middlewares=cors
       - traefik.http.services.rapid.loadbalancer.server.port=8080
+
+  pathways-editor:
+    image: node:latest
+    entrypoint: npm
+    command: run start
+    user: node
+    working_dir: /app
+    tty: true
+    volumes:
+      - ./pathways-editor:/app
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.cors.headers.accesscontrolallowmethods=*
+      - traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=*
+      - traefik.http.middlewares.cors.headers.accesscontrolmaxage=100
+      - traefik.http.middlewares.cors.headers.addvaryheader=true
+      - traefik.http.routers.pathways-editor.rule=Host(`${WS_PATHWAYS_EDITOR_HOST}`)
+      - traefik.http.routers.pathways-editor.middlewares=cors
+      - traefik.http.services.pathways-editor.loadbalancer.server.port=8080
 
   osm-log-proxy:
     image: nginx:latest

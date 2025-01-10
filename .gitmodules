@@ -1,19 +1,24 @@
 [submodule "tasking-manager"]
 	path = tasking-manager
-	url = https://github.com/TaskarCenterAtUW/workspaces-tasking-manager.git
+	url = git@github.com:TaskarCenterAtUW/workspaces-tasking-manager.git
 	branch = workspaces
 [submodule "osm-cgimap"]
 	path = osm-cgimap
-	url = https://github.com/TaskarCenterAtUW/workspaces-cgimap.git
+	url = git@github.com:TaskarCenterAtUW/workspaces-cgimap.git
 	branch = workspaces
 [submodule "osm-rails"]
 	path = osm-rails
-	url = https://github.com/TaskarCenterAtUW/workspaces-openstreetmap-website.git
+	url = git@github.com:TaskarCenterAtUW/workspaces-openstreetmap-website.git
 	branch = workspaces
 [submodule "frontend"]
 	path = frontend
-	url = https://github.com/TaskarCenterAtUW/workspaces-frontend.git
+	url = git@github.com:TaskarCenterAtUW/workspaces-frontend.git
 	branch = temp-backup
+[submodule "rapid"]
+	path = rapid
+	url = git@github.com:TaskarCenterAtUW/workspaces-rapid.git
+	branch = workspaces
 [submodule "pathways-editor"]
 	path = pathways-editor
-	url = https://github.com/TaskarCenterAtUW/GTFS-Pathways-Editor
+	url = git@github.com:TaskarCenterAtUW/workspaces-pathways-editor.git
+	branch = workspaces
