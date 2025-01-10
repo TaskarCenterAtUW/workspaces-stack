@@ -19,10 +19,21 @@ jobs:
           with:
             submodules: recursive
         
+        - name: Login to Docker Hub
+          uses: docker/login-action@v3
+          with:
+            registry: ${{ vars.WS_DOCKER_REGISTRY }}
+            username: ${{ vars.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+                  
         - name: Set commit SHA as code version
           run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
         - name: Build the stack
-          run: docker compose -f docker-compose.build.yml --env-file example.env build --build-arg CODE_VERSION=${CODE_VERSION}
+          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
 
+        - name: Push the stack to ACR
+          run: docker compose --env-file tdei_uw.env push
+
+    
     
