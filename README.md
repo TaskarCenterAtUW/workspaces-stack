@@ -36,3 +36,4 @@ Replace XXX.env with the environment definition file of the environment for whic
 # Other Files
 
 * ```example.env```: template of the .env file required by the Docker compose YAML files
+* ```tdei_uw.env```: .env for deployment at UW's TDEI center. Only UW should use this, new users should adapt example.env to suit their needs. LTG: remove this file from this repo. 
