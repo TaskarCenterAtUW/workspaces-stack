@@ -62,6 +62,7 @@ jobs:
           run: |
             mkdir -p ~/.ssh
               eval `ssh-agent -s`
+              ssh-keyscan 52.156.141.168 >> ~/.ssh/known_hosts
               echo "${{ secrets.GH_ACTIONS_SSH_KEY }}" > ~/.ssh/github_actions
               chmod 600 ~/.ssh/github_actions
               ssh-add ~/.ssh/github_actions		  
