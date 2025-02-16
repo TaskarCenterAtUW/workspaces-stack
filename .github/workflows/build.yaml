@@ -68,6 +68,6 @@ jobs:
               ssh-add ~/.ssh/github_actions		  
               docker context create dev2 --docker "host=ssh://root@52.156.141.168"
               docker context use dev2
-              docker ps
+              docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --pull always --force-recreate --remove-orphans
 
     
