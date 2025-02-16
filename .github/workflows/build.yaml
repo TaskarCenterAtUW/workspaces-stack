@@ -28,6 +28,12 @@ jobs:
         - name: Set commit SHA as code version
           run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
+        - name: Release notes
+          run:
+              ./gen-rel-notes.sh > CHANGELOG
+              
+
+               
 #        - name: Build the stack
 #          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
 #          env:
@@ -75,10 +81,13 @@ jobs:
           run: |
             mkdir -p ~/.ssh
               eval `ssh-agent -s`
+
               ssh-keyscan 52.156.141.168 >> ~/.ssh/known_hosts
+
               echo "${{ secrets.GH_ACTIONS_SSH_KEY }}" > ~/.ssh/github_actions
               chmod 600 ~/.ssh/github_actions
               ssh-add ~/.ssh/github_actions		  
+
               docker context create dev2 --docker "host=ssh://root@52.156.141.168"
               docker context use dev2
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --pull always --force-recreate --remove-orphans
