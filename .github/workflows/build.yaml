@@ -57,4 +57,16 @@ jobs:
               WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
+
+        - name: Setup Docker Context
+          run: |
+			mkdir -p ~/.ssh
+			echo "${{ secrets.GH_ACTIONS_SSH_KEY }}" > ~/.ssh/github_action
+			chmod 600 ~/.ssh/github_actions
+			ssh-add ~/.ssh/github_actions		  
+
+			docker context create dev2 --docker "host=ssh://root@52.156.141.168"
+			docker context use dev2
+			docker ps
+
     
