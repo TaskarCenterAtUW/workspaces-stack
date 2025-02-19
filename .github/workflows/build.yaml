@@ -43,7 +43,7 @@ jobs:
           run: | 
             cp tdei_uw.env .env
               echo "CODE_VERSION=${CODE_VERSION}" >> .env
-              docker buildx bake -f docker-compose.build.yml --push --set '*.cache-from=type=local,src=/tmp/.buildx-cache-app' --set '*.cache-to=type=local,dest=/tmp/.buildx-cache-app-new,mode=max' --allow=fs=/tmp                                  
+              docker buildx bake -f docker-compose.build.yml --push #--set '*.cache-from=type=local,src=/tmp/.buildx-cache-app' --set '*.cache-to=type=local,dest=/tmp/.buildx-cache-app-new,mode=max' --allow=fs=/tmp                                  
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
