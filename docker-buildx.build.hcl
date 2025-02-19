@@ -41,9 +41,11 @@ target "frontend" {
         "${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}"
     ]
     cache-to = [
-        "type=inline"
+        "type=gha"
     ]    
-
+    cache-from = [
+        "type=gha"
+    ]    
  
 }
 
