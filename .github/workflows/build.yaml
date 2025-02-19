@@ -32,22 +32,10 @@ jobs:
               ./gen-rel-notes.sh > CHANGELOG
                              
         - name: Build the stack
-          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
-          env:
-              ENV: ${{ vars.ENV }}
-              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
-
-              # passwords
-              WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
-              WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
-              WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
-              WS_OSM_SECRET_KEY_BASE: ${{ secrets.WS_OSM_SECRET_KEY_BASE }}
-              WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
-              WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
-              WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
-
-        - name: Push the stack to AzureCR
-          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env push
+          run: | 
+            cp tdei_uw.env .env
+              echo "CODE_VERSION=${CODE_VERSION}" >> .env
+              docker buildx bake -f docker-compose.build.yml --push
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
