@@ -45,7 +45,7 @@ variable "VITE_TDEI_API_URL" {
 }
 
 variable "VITE_TDEI_USER_API_URL" {
-    default = "https://tdei-usermanagement-be-${ENV}.azurewebsites.net/api/v1/
+    default = "https://tdei-usermanagement-be-${ENV}.azurewebsites.net/api/v1/"
 }
 
 target "frontend" {
