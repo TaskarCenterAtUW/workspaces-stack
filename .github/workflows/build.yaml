@@ -93,7 +93,7 @@ jobs:
               docker context use dev
 
               # remove images no longer in use--need disk space
-              docker rmi $(docker images -f dangling=true -q)
+              docker image prune -a -f
 
               # pull new images, recreate containers
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --pull always --force-recreate --remove-orphans
