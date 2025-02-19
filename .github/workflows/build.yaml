@@ -46,8 +46,9 @@ jobs:
               docker-compose.build.yml 
             push: true
             set: |
-              *.cache-from=type=gha
-              *.cache-to=type=gha,mode=max
+              *.cache-from=type=registry,ref=user/app:latest
+              *.cache-to=type=inline              
+              
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
