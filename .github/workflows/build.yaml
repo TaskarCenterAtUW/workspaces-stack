@@ -60,7 +60,7 @@ jobs:
           run: | 
             cp tdei_uw.env .env
               echo "CODE_VERSION=${CODE_VERSION}" >> .env
-              docker buildx bake --file docker-buildx.build.hcl --push                                 
+              docker buildx bake --file docker-compose.build.yml --push                                 
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
