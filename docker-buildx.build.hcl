@@ -40,6 +40,11 @@ target "frontend" {
         "${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}"
     ]
+    cache-to = [
+        "type=inline"
+    ]    
+
+ 
 }
 
 target "osm-cgimap" {
