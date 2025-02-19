@@ -51,15 +51,15 @@ variable "VITE_TDEI_USER_API_URL" {
 target "frontend" {
     context = "frontend"
     dockerfile = "Dockerfile"
-    args = {
-      CODE_VERSION = ${CODE_VERSION}
-      VITE_API_URL = ${VITE_API_URL}
-      VITE_OSM_URL = ${VITE_OSM_URL}
-      VITE_PATHWAYS_EDITOR_URL = ${VITE_PATHWAYS_EDITOR_URL}
-      VITE_RAPID_URL = ${VITE_RAPID_URL}
-      VITE_TDEI_API_URL = ${VITE_TDEI_API_URL}
-      VITE_TDEI_USER_API_URL = ${VITE_TDEI_USER_API_URL}
-    }  
+#    args = {
+#      CODE_VERSION = ${CODE_VERSION}
+#      VITE_API_URL = ${VITE_API_URL}
+#      VITE_OSM_URL = ${VITE_OSM_URL}
+#      VITE_PATHWAYS_EDITOR_URL = ${VITE_PATHWAYS_EDITOR_URL}
+#      VITE_RAPID_URL = ${VITE_RAPID_URL}
+#      VITE_TDEI_API_URL = ${VITE_TDEI_API_URL}
+#      VITE_TDEI_USER_API_URL = ${VITE_TDEI_USER_API_URL}
+#    }  
     tags = [
         "${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}"
