@@ -10,6 +10,7 @@ services:
         VITE_OSM_URL: ${WS_OSM_URL}
         VITE_RAPID_URL: ${WS_RAPID_URL}
         VITE_PATHWAYS_EDITOR_URL: ${WS_PATHWAYS_EDITOR_URL}
+        CODE_VERSION: ${CODE_VERSION}
 
   frontend_tag:
     extends: frontend
