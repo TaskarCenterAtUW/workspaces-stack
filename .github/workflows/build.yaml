@@ -62,20 +62,20 @@ jobs:
 #              WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
 #              WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
 
-#        - name: Docker Compose 
-#          env:
-#              ENV: ${{ vars.ENV }}
-#              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
-#              AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
-#              
-#              # passwords
-#              WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
-#              WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
-#              WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
-#              WS_OSM_SECRET_KEY_BASE: ${{ secrets.WS_OSM_SECRET_KEY_BASE }}
-#              WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
-#              WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
-#              WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
+        - name: Docker Compose 
+          env:
+              ENV: ${{ vars.ENV }}
+              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
+              AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
+              
+              # passwords
+              WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
+              WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
+              WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
+              WS_OSM_SECRET_KEY_BASE: ${{ secrets.WS_OSM_SECRET_KEY_BASE }}
+              WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
+              WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
+              WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
         
           run: |
             mkdir -p ~/.ssh
