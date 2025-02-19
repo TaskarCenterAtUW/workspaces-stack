@@ -43,6 +43,7 @@ jobs:
             files: 
                 docker-buildx.build.hcl
           env:
+              GIT_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
          
