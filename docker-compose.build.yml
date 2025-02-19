@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}
     build:
       context: frontend
       args:
@@ -15,9 +15,8 @@ services:
     extends: frontend
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}
 
-
   rapid:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${ENV}
     build:
       context: rapid
 
@@ -25,9 +24,8 @@ services:
     extends: rapid
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${CODE_VERSION}
 
-
   pathways-editor:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${ENV}
     build:
       context: pathways-editor
 
@@ -35,9 +33,8 @@ services:
     extends: pathways-editor
     image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${CODE_VERSION}
 
-
   osm-log-proxy:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${ENV}
     build:
       context: osm-log-proxy
 
@@ -45,9 +42,8 @@ services:
     extends: osm-log-proxy
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${CODE_VERSION}
 
-
   osm-web:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${ENV}
     build:
       context: osm-web
 
@@ -55,9 +51,8 @@ services:
     extends: osm-web
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${CODE_VERSION}
 
-
   osm-rails:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
     build:
       context: osm-rails
       dockerfile: Dockerfile.prod
@@ -66,9 +61,8 @@ services:
     extends: osm-rails
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${CODE_VERSION}
 
-
   osm-cgimap:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${ENV}
     build:
       context: osm-cgimap
       dockerfile: docker/ubuntu/Dockerfile2404
@@ -77,9 +71,8 @@ services:
     extends: osm-cgimap
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
-
   tasks-frontend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
     build:
       context: tasking-manager
       dockerfile: ./scripts/docker/Dockerfile.frontend
@@ -93,7 +86,7 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
 
   tasks-backend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}
     build:
       context: tasking-manager
       dockerfile: ./scripts/docker/Dockerfile.backend
