@@ -13,28 +13,52 @@ group "default" {
 }
 
 variable "WS_DOCKER_REGISTRY" {
-      default = "opensidewalksdev.azurecr.io"
+    default = "opensidewalksdev.azurecr.io"
 }
 
 variable "ENV" {
-      default = "dev"
+    default = "dev"
 }
     
 variable "CODE_VERSION" {
-      default = "0"
+    default = "0"
 }
- 
+
+variable "VITE_API_URL" {
+    default = "https://api.workspaces-${ENV}.sidewalks.washington.edu/api/v1/"
+}
+
+variable "VITE_OSM_URL" {
+    default = "https://osm.workspaces-${ENV}.sidewalks.washington.edu/"
+}
+
+variable "VITE_PATHWAYS_EDITOR_URL" {
+    default = "https://pathways.workspaces-${ENV}.sidewalks.washington.edu/"
+}
+
+variable "VITE_RAPID_URL" {
+    default = "https://rapid.workspaces-${ENV}.sidewalks.washington.edu/"
+}
+
+variable "VITE_TDEI_API_URL" {
+    default = "https://tdei-api-${ENV}.azurewebsites.net/api/v1/"
+}
+
+variable "VITE_TDEI_USER_API_URL" {
+    default = "https://tdei-usermanagement-be-${ENV}.azurewebsites.net/api/v1/
+}
+
 target "frontend" {
     context = "frontend"
     dockerfile = "Dockerfile"
     args = {
-      CODE_VERSION = ""
-      VITE_API_URL = "https://api.workspaces-${ENV}.sidewalks.washington.edu/api/v1/"
-      VITE_OSM_URL = "https://osm.workspaces-${ENV}.sidewalks.washington.edu/"
-      VITE_PATHWAYS_EDITOR_URL = "https://pathways.workspaces-${ENV}.sidewalks.washington.edu/"
-      VITE_RAPID_URL = "https://rapid.workspaces-${ENV}.sidewalks.washington.edu/"
-      VITE_TDEI_API_URL = "https://tdei-api-${ENV}.azurewebsites.net/api/v1/"
-      VITE_TDEI_USER_API_URL = "https://tdei-usermanagement-be-${ENV}.azurewebsites.net/api/v1/"
+      CODE_VERSION = ${CODE_VERSION}
+      VITE_API_URL = ${VITE_API_URL}
+      VITE_OSM_URL = ${VITE_OSM_URL}
+      VITE_PATHWAYS_EDITOR_URL = ${VITE_PATHWAYS_EDITOR_URL}
+      VITE_RAPID_URL = ${VITE_RAPID_URL}
+      VITE_TDEI_API_URL = ${VITE_TDEI_API_URL}
+      VITE_TDEI_USER_API_URL = ${VITE_TDEI_USER_API_URL}
     }  
     tags = [
         "${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}",
