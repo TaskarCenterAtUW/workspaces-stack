@@ -46,7 +46,12 @@ jobs:
         
         - name: Build and push
           uses: docker/bake-action@v1.4.2
-          env:
+          with:
+            files: docker-buildx.build.hcl
+            push: true
+            set: |
+              *.cache-from=type=local,src=/tmp/.buildx-cache
+              *.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
     
@@ -58,14 +63,7 @@ jobs:
               WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
-          with:
-            files: docker-buildx.build.hcl
-            push: true
-            set: |
-              *.cache-from=type=local,src=/tmp/.buildx-cache
-              *.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
-            allow:
-                "fs=/tmp"
+            allow: "fs=/tmp"
                                      
         #- name: Build and push
         #  run: | 
