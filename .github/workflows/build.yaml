@@ -31,6 +31,7 @@ jobs:
 #          run:
 #              ./gen-rel-notes.sh > CHANGELOG
 
+# JM: trying to get gha caching to work, no dice yet. 
 #        - name: Prepare .env
 #          run: | 
 #            cp tdei_uw.env .env
@@ -43,7 +44,6 @@ jobs:
 #            files: 
 #                docker-buildx.build.hcl
 #          env:
-#              GIT_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #              ENV: ${{ vars.ENV }}
 #              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
          
