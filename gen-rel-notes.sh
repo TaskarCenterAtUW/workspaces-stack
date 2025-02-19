@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for d in `find . -not -path '*/.*' -type d -depth 1`; do 
+for d in `find . -not -path '*/.*' -type d -maxdepth 1`; do 
 	cd $d
 
 	echo $d | cut -d "/" -f 2
