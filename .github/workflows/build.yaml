@@ -40,7 +40,8 @@ jobs:
           uses: docker/bake-action@v6
           with:
             push: true
-            file: docker-buildx.build.hcl
+            files: 
+                docker-buildx.build.hcl
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
