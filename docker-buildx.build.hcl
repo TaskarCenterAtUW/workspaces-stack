@@ -56,6 +56,12 @@ target "osm-cgimap" {
         "${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}"
     ]
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
 
 target "osm-log-proxy" {
@@ -65,6 +71,12 @@ target "osm-log-proxy" {
         "${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${CODE_VERSION}"
     ]
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
 
 target "osm-rails" {
@@ -74,6 +86,12 @@ target "osm-rails" {
         "${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${CODE_VERSION}"
     ]
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
 
 target "osm-web" {
@@ -83,6 +101,12 @@ target "osm-web" {
         "${WS_DOCKER_REGISTRY}/workspaces-osm-web:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-osm-web:${CODE_VERSION}"
     ]
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
 
 target "pathways-editor" {
@@ -92,6 +116,12 @@ target "pathways-editor" {
         "${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${CODE_VERSION}"
     ]
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
 
 target "rapid" {
@@ -101,6 +131,12 @@ target "rapid" {
         "${WS_DOCKER_REGISTRY}/workspaces-rapid:${ENV}",
         "${WS_DOCKER_REGISTRY}/workspaces-rapid:${CODE_VERSION}"
     ]
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
 
 target "tasks-backend" {
@@ -114,6 +150,12 @@ target "tasks-backend" {
     args = {
       APP_UID = "1000"
     }
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
 
 target "tasks-frontend" {
@@ -126,4 +168,10 @@ target "tasks-frontend" {
     args = {
       TM_APP_API_URL = "https://tasks.workspaces-${ENV}.sidewalks.washington.edu/"
     }
+    cache-to = [
+        "type=gha"
+    ]    
+    cache-from = [
+        "type=gha"
+    ]    
 }
