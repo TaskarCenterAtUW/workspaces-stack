@@ -36,16 +36,15 @@ jobs:
             cp tdei_uw.env .env
               echo "CODE_VERSION=${CODE_VERSION}" >> .env
 
-        - name: Set up buildx
-          uses: docker/setup-buildx-action@v3
-
         - name: Build and push
           uses: docker/bake-action@v6
           with:
             files: 
               docker-compose.build.yml 
             push: true
-         
+            set: |
+              *.cache-from=type=registry,ref=user/app:latest
+              *.cache-to=type=inline              
               
           env:
               ENV: ${{ vars.ENV }}
