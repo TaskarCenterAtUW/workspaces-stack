@@ -90,6 +90,6 @@ jobs:
               docker image prune -a -f
 
               # pull new images, recreate containers
-              docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --pull always --force-recreate --remove-orphans
+              docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
 
     
