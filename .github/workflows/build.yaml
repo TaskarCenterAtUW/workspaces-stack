@@ -83,7 +83,7 @@ jobs:
 
               ssh-keyscan ${{ vars.AZURE_DOCKER_HOST_IP }} >> ~/.ssh/known_hosts
 
-              echo "${{ vars.GH_ACTIONS_SSH_KEY }}" > ~/.ssh/github_actions
+              echo "${{ secrets.GH_ACTIONS_SSH_KEY }}" > ~/.ssh/github_actions
               chmod 600 ~/.ssh/github_actions
               ssh-add ~/.ssh/github_actions		  
 
