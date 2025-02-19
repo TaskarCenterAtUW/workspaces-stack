@@ -31,21 +31,11 @@ jobs:
           run:
               ./gen-rel-notes.sh > CHANGELOG
                              
-        - name: Prepare for buildx
+        - name: Build and push
           run: | 
             cp tdei_uw.env .env
               echo "CODE_VERSION=${CODE_VERSION}" >> .env
-
-        - name: Build and push
-          uses: docker/bake-action@v6
-          with:
-            files: 
-              docker-compose.build.yml 
-            push: true
-            set: |
-              *.cache-from=type=registry,ref=user/app:latest
-              *.cache-to=type=inline              
-              
+              docker buildx bake -f docker-compose.build.yml --push --set *.cache-from=type=registry,ref=user/app:latest --set *.cache-to=type=inline              
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
