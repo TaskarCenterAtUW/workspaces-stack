@@ -87,7 +87,7 @@ jobs:
               chmod 600 ~/.ssh/github_actions
               ssh-add ~/.ssh/github_actions		  
 
-              docker context create dev --docker "host=ssh://root@${{ vars.AZURE_DOCKER_HOST_IP }}"
+              docker context create dev --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
               docker context use dev
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --pull always --force-recreate --remove-orphans
 
