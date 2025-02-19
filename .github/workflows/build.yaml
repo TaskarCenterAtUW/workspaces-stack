@@ -27,15 +27,20 @@ jobs:
         - name: Set commit SHA as code version
           run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
-        - name: Generate release notes
-          run:
-              ./gen-rel-notes.sh > CHANGELOG
-                                                                            
-        - name: Build and push
+#        - name: Generate release notes
+#          run:
+#              ./gen-rel-notes.sh > CHANGELOG
+
+        - name: Prepare .env
           run: | 
             cp tdei_uw.env .env
               echo "CODE_VERSION=${CODE_VERSION}" >> .env
-              docker buildx bake --file docker-buildx.build.hcl --push                                 
+
+        - name: Build and push
+          uses: docker/bake-action@v6
+          with:
+            push: true
+            file: docker-buildx.build.hcl
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -48,6 +53,25 @@ jobs:
               WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
+              
+                                                                                          
+#        - name: Build and push
+#          run: | 
+#            cp tdei_uw.env .env
+#              echo "CODE_VERSION=${CODE_VERSION}" >> .env
+#              docker buildx bake --file docker-buildx.build.hcl --push                                 
+#          env:
+#              ENV: ${{ vars.ENV }}
+#              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
+#         
+#              # passwords
+#              WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
+#              WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
+#              WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
+#              WS_OSM_SECRET_KEY_BASE: ${{ secrets.WS_OSM_SECRET_KEY_BASE }}
+#              WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
+#              WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
+#              WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
 
         - name: Deploy
           env:
