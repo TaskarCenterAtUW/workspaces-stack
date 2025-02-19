@@ -78,21 +78,29 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
 
-#  tasks-frontend:
-#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
-#    build:
-#      context: tasking-manager
-#      dockerfile: ./scripts/docker/Dockerfile.frontend
-#      args:
-#        TM_APP_API_URL: ${WS_TASKS_URL}
-#        #TM_CONSUMER_KEY
-#        #TM_CONSUMER_SECRET
+  tasks-frontend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
+    build:
+      context: tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.frontend
+      args:
+        TM_APP_API_URL: ${WS_TASKS_URL}
+        #TM_CONSUMER_KEY
+        #TM_CONSUMER_SECRET
 
-#  tasks-backend:
-#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
-#    build:
-#      context: tasking-manager
-#      dockerfile: ./scripts/docker/Dockerfile.backend
-#      target: prod
-#      args:
-#        APP_UID: 1000
+  tasks-frontend_tag:
+    extends: tasks-frontend
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
+
+  tasks-backend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+    build:
+      context: tasking-manager
+      dockerfile: ./scripts/docker/Dockerfile.backend
+      target: prod
+      args:
+        APP_UID: 1000
+
+  tasks-backend_tag:
+    extends: tasks-backend
+    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
