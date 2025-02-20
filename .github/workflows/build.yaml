@@ -42,11 +42,6 @@ jobs:
             key: ${{ runner.os }}-buildx-${{ github.sha }}
             restore-keys: |
               ${{ runner.os }}-buildx-
-
-        - name: Move new cache
-          run: |
-            rm -rf /tmp/.buildkit-cache
-            mv /tmp/.buildkit-cache-new /tmp/.buildkit-cache
                                                                                                                    
         - name: Build and push
           run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --push --build-arg CODE_VERSION=${CODE_VERSION}
@@ -64,6 +59,11 @@ jobs:
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
 
+        - name: Move new cache
+          run: |
+            rm -rf /tmp/.buildkit-cache
+            mv /tmp/.buildkit-cache-new /tmp/.buildkit-cache
+            
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
