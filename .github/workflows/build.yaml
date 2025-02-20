@@ -26,6 +26,9 @@ jobs:
           with:
             submodules: recursive
         
+        - name: Get tags
+          run: git fetch --tags
+                
         - uses: docker/login-action@v3
           with:
             registry: ${{ vars.WS_DOCKER_REGISTRY }}
