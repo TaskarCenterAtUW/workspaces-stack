@@ -32,13 +32,16 @@ jobs:
             username: ${{ vars.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+        - name: Get last tag
+          run: echo "TAG_LAST=$(git describe --tags --abbrev=0" >> $GITHUB_ENV
+
         - name: "Build Changelog"
           id: build_changelog
           uses: mikepenz/release-changelog-builder-action@v5
           with:
-              fromTag: "@~2" # last commit
-              toTag: "@" # this commit
-              mode: "PR"
+              fromTag: "${{ env.TAG_LAST }}"
+              toTag: "${{ github.ref }}"
+              mode: "HYBRID"
               outputFile: "CHANGELOG.md"
 
         - name: Print CHANGELOG.md
