@@ -27,10 +27,10 @@ jobs:
         - name: Set commit SHA as code version
           run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
-#        - name: Generate release notes
-#          run:
-#              ./gen-rel-notes.sh > CHANGELOG
-                                                                                                        
+        - name: "Build Changelog"
+          id: build_changelog
+          uses: mikepenz/release-changelog-builder-action@v5
+                                                                                                                  
         - name: Build and push
           run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
           env:
@@ -81,14 +81,18 @@ jobs:
               # stop all running images, remove the containers, remove the images
               # why? in case we're rebuilding the image of the same commit, we want to ensure the newer image is deployed
               # in case the last one was corrupted for some reason--just to avoid any questions about deployment reliability
-              docker stop $(docker ps -q)
-              docker rm -v $(docker ps --filter status=exited -q)
-              docker rmi $(docker images -q)
+              #docker stop $(docker ps -q)
+              #docker rm -v $(docker ps --filter status=exited -q) 
+              #docker rmi $(docker images -q) 
 
               # remove images no longer in use--may need disk space to pull
               # docker image prune -a -f
 
               # pull new images, recreate containers
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
+              
+              # check what was deployed, just to save in the GH logs
+              sleep 30s 
+              docker ps 
 
     
