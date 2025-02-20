@@ -34,16 +34,16 @@ jobs:
         - name: Build frontend
           uses: docker/build-push-action@v6
           with:
-            context: ./frontend/
+            context: ./frontend
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ env.CODE_VERSION }}
 
         - name: Build osm-cgimap
           uses: docker/build-push-action@v6
           with:
-            context: ./osm-cgimap/
+            context: ./osm-cgimap
             push: true
-            file: docker/ubuntu/Dockerfile2404
+            file: ./osm-cgimap/docker/ubuntu/Dockerfile2404
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ env.CODE_VERSION }}
 
 
@@ -60,14 +60,14 @@ jobs:
           with:
             context: ./osm-rails
             push: true
-            file: Dockerfile.prod
+            file: ./osm-rails/Dockerfile.prod
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-rails:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-rails:${{ env.CODE_VERSION }}
 
 
         - name: Build osm-web
           uses: docker/build-push-action@v6
           with:
-            context: osm-web
+            context: ./osm-web
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-web:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-web:${{ env.CODE_VERSION }}
 
@@ -75,7 +75,7 @@ jobs:
         - name: Build pathways-editor
           uses: docker/build-push-action@v6
           with:
-            context: pathways-editor
+            context: ./pathways-editor
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-pathways-editor:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-pathways-editor:${{ env.CODE_VERSION }}
 
@@ -83,7 +83,7 @@ jobs:
         - name: Build rapid
           uses: docker/build-push-action@v6
           with:
-            context: rapid
+            context: ./rapid
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-rapid:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-rapid:${{ env.CODE_VERSION }}
 
@@ -91,9 +91,9 @@ jobs:
         - name: Build tasks-backend
           uses: docker/build-push-action@v6
           with:
-            context: tasking-manager
+            context: ./tasking-manager
             push: true
-            file: ./scripts/docker/Dockerfile.backend
+            file: ./tasking-manager/scripts/docker/Dockerfile.backend
             target: prod
             build-args: |
                 APP_UID=1000
@@ -103,9 +103,9 @@ jobs:
         - name: Build tasks-frontend
           uses: docker/build-push-action@v6
           with:
-            context: tasking-manager
+            context: ./tasking-manager
             push: true
-            file: ./scripts/docker/Dockerfile.frontend
+            file: ./tasking-manager/scripts/docker/Dockerfile.frontend
             build-args: |
                 TM_APP_API_URL="https://tasks.workspaces-${{ vars.ENV }}.sidewalks.washington.edu/"
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-tasks-frontend:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-tasks-frontend:${{ env.CODE_VERSION }}
