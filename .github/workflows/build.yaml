@@ -38,7 +38,7 @@ jobs:
         - name: Build and push
           run: | 
             docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
-              docker compose -f docker-compose.build.yml --env-file tdei_uw.env push --build-arg CODE_VERSION=${CODE_VERSION}
+              docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
