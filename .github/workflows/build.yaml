@@ -86,7 +86,7 @@ jobs:
               #docker rmi $(docker images -q) 
 
               # remove images no longer in use--may need disk space to pull
-              # docker image prune -a -f
+              docker image prune -a -f
 
               # pull new images, recreate containers
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
