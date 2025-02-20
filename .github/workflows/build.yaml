@@ -30,7 +30,9 @@ jobs:
         - name: "Build Changelog"
           id: build_changelog
           uses: mikepenz/release-changelog-builder-action@v5
-                                                                                                                  
+          with:
+              fromTag: "0.1"
+                                                                                                                   
         - name: Build and push
           run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
           env:
