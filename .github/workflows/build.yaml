@@ -58,7 +58,7 @@ jobs:
               AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
 
               # tag to deploy
-              WS_DOCKER_TAG: ${{ env.CODE_VERSION }}
+              WS_DOCKER_TAG: ${{ github.sha }}
               
               # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
