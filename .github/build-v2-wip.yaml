@@ -1,3 +1,11 @@
+#
+#
+# This is work in progress! Goal: parallelize builds and cache docker layers. Ideally not rebuild images that have no changed commits, 
+# e.g. version each component separately vs. versioning all in one package based on workspaces-stack's version.
+#
+#
+
+
 name: "Release v2"
 on:
   workflow_dispatch:

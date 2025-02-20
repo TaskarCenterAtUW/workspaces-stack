@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest 
-    name: Image Build 
+    name: Build, Push, Deploy (dev)
     environment: "dev"
     timeout-minutes: 45
     steps:
