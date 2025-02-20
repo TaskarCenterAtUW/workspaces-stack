@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest 
-    name: Build and Push
+    name: Build, Push, Deploy
     environment: "dev"
     timeout-minutes: 45
     steps:
@@ -124,13 +124,6 @@ jobs:
             cache-from: type=gha
             cache-to: type=gha,mode=max
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest 
-    name: Deploy 
-    environment: "dev"
-    timeout-minutes: 45
-    steps:   
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
