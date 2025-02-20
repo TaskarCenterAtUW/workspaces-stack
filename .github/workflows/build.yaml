@@ -118,8 +118,5 @@ jobs:
               sleep 30s 
 
               echo Deploy list
-              docker ps 
-              
-              - uses: actions/upload-artifact@v4
-              
+              docker ps               
        
