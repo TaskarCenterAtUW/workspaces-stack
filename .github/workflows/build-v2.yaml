@@ -18,9 +18,6 @@ jobs:
           with:
             submodules: recursive
         
-        - name: Set commit SHA as code version
-          run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
-
 #        - name: Generate release notes
 #          run:
 #              ./gen-rel-notes.sh > CHANGELOG
@@ -33,6 +30,9 @@ jobs:
     environment: "dev"
     timeout-minutes: 45
     steps:
+        - name: Set commit SHA as code version
+          run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
         - uses: docker/login-action@v3
           with:
             registry: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -46,6 +46,9 @@ jobs:
             push: true
             file: Dockerfile
             tags: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build osm-cgimap
           uses: docker/build-push-action@v6
@@ -54,6 +57,9 @@ jobs:
             push: true
             file: docker/ubuntu/Dockerfile2404
             tags: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build osm-log-proxy
           uses: docker/build-push-action@v6
@@ -62,6 +68,9 @@ jobs:
             push: true
             file: Dockerfile
             tags: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build osm-rails
           uses: docker/build-push-action@v6
@@ -70,6 +79,9 @@ jobs:
             push: true
             file: Dockerfile.prod
             tags: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build osm-web
           uses: docker/build-push-action@v6
@@ -78,6 +90,9 @@ jobs:
             push: true
             file: Dockerfile
             tags: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build pathways-editor
           uses: docker/build-push-action@v6
@@ -86,6 +101,9 @@ jobs:
             push: true
             file: Dockerfile
             tags: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build rapid
           uses: docker/build-push-action@v6
@@ -94,6 +112,9 @@ jobs:
             push: true
             file: Dockerfile
             tags: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-rapid:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build tasks-backend
           uses: docker/build-push-action@v6
@@ -105,6 +126,9 @@ jobs:
             build-args: |
                 APP_UID=1000
             tags: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
         - name: Build tasks-frontend
           uses: docker/build-push-action@v6
@@ -115,6 +139,9 @@ jobs:
             build-args: |
                 TM_APP_API_URL="https://tasks.workspaces-${ENV}.sidewalks.washington.edu/"
             tags: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}, ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
+          env:
+            ENV: ${{ vars.ENV }}
+            WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
 
   deploy:
     needs: build
