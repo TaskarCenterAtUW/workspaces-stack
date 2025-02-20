@@ -34,14 +34,14 @@ jobs:
         - name: Build frontend
           uses: docker/build-push-action@v6
           with:
-            context: ./frontend
+            context: ./frontend/
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ env.CODE_VERSION }}
 
         - name: Build osm-cgimap
           uses: docker/build-push-action@v6
           with:
-            context: ./osm-cgimap
+            context: ./osm-cgimap/
             push: true
             file: docker/ubuntu/Dockerfile2404
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ env.CODE_VERSION }}
