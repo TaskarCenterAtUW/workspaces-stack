@@ -8,9 +8,9 @@ on:
         default: 'dev'
 
 jobs:
-  prep:
+  build:
     runs-on: ubuntu-latest 
-    name: Prep 
+    name: Build and Push
     environment: "dev"
     timeout-minutes: 45
     steps:
@@ -22,14 +22,6 @@ jobs:
 #          run:
 #              ./gen-rel-notes.sh > CHANGELOG
 
-
-  build:
-    needs: prep
-    runs-on: ubuntu-latest 
-    name: Build 
-    environment: "dev"
-    timeout-minutes: 45
-    steps:
         - name: Set commit SHA as code version
           run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
