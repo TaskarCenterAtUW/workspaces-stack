@@ -51,9 +51,6 @@ jobs:
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
 
-        - name: Print changelog
-          run: echo ${{steps.build_changelog.outputs.changelog}}
-            
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
