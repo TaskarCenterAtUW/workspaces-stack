@@ -32,10 +32,7 @@ jobs:
 #              ./gen-rel-notes.sh > CHANGELOG
                                                                                                         
         - name: Build and push
-          run: | 
-            cp tdei_uw.env .env
-              echo "CODE_VERSION=${CODE_VERSION}" >> .env
-              docker buildx bake --file docker-compose.build.yml --push                                 
+          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -81,8 +78,15 @@ jobs:
               docker context create dev --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
               docker context use dev
 
+              # stop all running images, remove the containers, remove the images
+              # why? in case we're rebuilding the image of the same commit, we want to ensure the newer image is deployed
+              # in case the last one was corrupted for some reason--just to avoid any questions about deployment reliability
+              docker stop $(docker ps -q)
+              docker rm -v $(docker ps --filter status=exited -q)
+              docker rmi $(docker images -q)
+
               # remove images no longer in use--may need disk space to pull
-              docker image prune -a -f
+              # docker image prune -a -f
 
               # pull new images, recreate containers
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
