@@ -36,7 +36,7 @@ jobs:
             password: ${{ secrets.DOCKERHUB_TOKEN }}
 
         - name: Get last tag
-          run: echo "TAG_LAST=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          run: echo "TAG_LAST=$(git describe --tags --abbrev=0 --always)" >> $GITHUB_ENV
 
         - name: "Build Changelog"
           id: build_changelog
