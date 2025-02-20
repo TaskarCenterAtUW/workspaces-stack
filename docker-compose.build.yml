@@ -58,7 +58,7 @@ services:
       cache_from:
         - type=local,src=/tmp/.buildkit-cache/osm-rails
       cache_to:
-        - type=local,dest=/tmp/.buildkit-cache/osm-rails,mode=max
+        - type=local,dest=/tmp/.buildkit-cache-new/osm-rails,mode=max
       context: osm-rails
       dockerfile: Dockerfile.prod
       
@@ -72,7 +72,7 @@ services:
       cache_from:
         - type=local,src=/tmp/.buildkit-cache/osm-cgimap
       cache_to:
-        - type=local,dest=/tmp/.buildkit-cache/osm-cgimap,mode=max
+        - type=local,dest=/tmp/.buildkit-cache-new/osm-cgimap,mode=max
       context: osm-cgimap
       dockerfile: docker/ubuntu/Dockerfile2404
 
