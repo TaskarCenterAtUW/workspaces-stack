@@ -37,6 +37,8 @@ jobs:
             context: ./frontend
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ env.CODE_VERSION }}
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build osm-cgimap
           uses: docker/build-push-action@v6
@@ -45,7 +47,8 @@ jobs:
             push: true
             file: ./osm-cgimap/docker/ubuntu/Dockerfile2404
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build osm-log-proxy
           uses: docker/build-push-action@v6
@@ -53,7 +56,8 @@ jobs:
             context: ./osm-log-proxy
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-log-proxy:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-log-proxy:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build osm-rails
           uses: docker/build-push-action@v6
@@ -62,7 +66,8 @@ jobs:
             push: true
             file: ./osm-rails/Dockerfile.prod
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-rails:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-rails:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build osm-web
           uses: docker/build-push-action@v6
@@ -70,7 +75,8 @@ jobs:
             context: ./osm-web
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-web:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-web:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build pathways-editor
           uses: docker/build-push-action@v6
@@ -78,7 +84,8 @@ jobs:
             context: ./pathways-editor
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-pathways-editor:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-pathways-editor:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build rapid
           uses: docker/build-push-action@v6
@@ -86,7 +93,8 @@ jobs:
             context: ./rapid
             push: true
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-rapid:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-rapid:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build tasks-backend
           uses: docker/build-push-action@v6
@@ -98,7 +106,8 @@ jobs:
             build-args: |
                 APP_UID=1000
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-tasks-backend:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-tasks-backend:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
         - name: Build tasks-frontend
           uses: docker/build-push-action@v6
@@ -109,7 +118,8 @@ jobs:
             build-args: |
                 TM_APP_API_URL="https://tasks.workspaces-${{ vars.ENV }}.sidewalks.washington.edu/"
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-tasks-frontend:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-tasks-frontend:${{ env.CODE_VERSION }}
-
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
   deploy:
     needs: build
