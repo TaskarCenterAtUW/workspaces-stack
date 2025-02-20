@@ -3,6 +3,10 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}
     build:
       context: frontend
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-frontend:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-frontend:buildcache,mode=max
       args:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
         VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
@@ -19,6 +23,10 @@ services:
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${ENV}
     build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-rapid:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-rapid:buildcache,mode=max
       context: rapid
 
   rapid_tag:
@@ -28,6 +36,10 @@ services:
   pathways-editor:
     image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${ENV}
     build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:buildcache,mode=max
       context: pathways-editor
 
   pathways-editor_tag:
@@ -37,6 +49,10 @@ services:
   osm-log-proxy:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${ENV}
     build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:buildcache,mode=max
       context: osm-log-proxy
 
   osm-log-proxy_tag:
@@ -46,6 +62,10 @@ services:
   osm-web:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${ENV}
     build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-web:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-web:buildcache,mode=max
       context: osm-web
 
   osm-web_tag:
@@ -83,6 +103,10 @@ services:
   tasks-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
     build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache,mode=max
       context: tasking-manager
       dockerfile: ./scripts/docker/Dockerfile.frontend
       args:
@@ -97,6 +121,10 @@ services:
   tasks-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}
     build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:buildcache,mode=max
       context: tasking-manager
       dockerfile: ./scripts/docker/Dockerfile.backend
       target: prod
