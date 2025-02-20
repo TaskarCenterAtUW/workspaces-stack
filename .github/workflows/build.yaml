@@ -2,11 +2,14 @@ name: "Release"
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Environment'     
-        required: true
-        default: 'dev'
-
+      build_flag:
+        description: 'Docker Build Flags'     
+        default: ''
+        type: choice
+        options:
+          - ''
+          - '--no-cache'
+        
 jobs:
   build:
     runs-on: ubuntu-latest 
@@ -37,7 +40,7 @@ jobs:
                                                                                                                    
         - name: Build and push
           run: | 
-            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
+            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} {{github.event.inputs.build_flag}} 
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
@@ -88,13 +91,6 @@ jobs:
               docker context create dev --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
               docker context use dev
 
-              # stop all running images, remove the containers, remove the images
-              # why? in case we're rebuilding the image of the same commit, we want to ensure the newer image is deployed
-              # in case the last one was corrupted for some reason--just to avoid any questions about deployment reliability
-              #docker stop $(docker ps -q)
-              #docker rm -v $(docker ps --filter status=exited -q) 
-              #docker rmi $(docker images -q) 
-
               # remove images no longer in use--may need disk space to pull
               echo Pruning old docker images
               docker image prune -a -f
@@ -103,8 +99,10 @@ jobs:
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
               
               # check what was deployed, just to save in the GH logs
-              echo Waiting for deployment to complete; listing deployed artifacts
+              echo Waiting for deployment to complete
               sleep 30s 
+
+              echo Deploy list
               docker ps 
 
     
