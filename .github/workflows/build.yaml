@@ -36,10 +36,13 @@ jobs:
           id: build_changelog
           uses: mikepenz/release-changelog-builder-action@v5
           with:
-              fromTag: "@~"
-              toTag: "@"
-              mode: "HYBRID"
+              fromTag: "@~" # last commit
+              toTag: "@" # this commit
+              mode: "PR"
               outputFile: "CHANGELOG.md"
+
+        - name: Print CHANGELOG.md
+          run: cat CHANGELOG.md
 
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
@@ -61,9 +64,6 @@ jobs:
               WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
-
-        - name: Print CHANGELOG.md
-          run: cat CHANGELOG.md
 
         - name: Deploy
           env:
@@ -113,5 +113,11 @@ jobs:
 
               echo Deploy list
               docker ps 
-
-    
+              
+              - uses: actions/upload-artifact@v4
+              
+        - name: Release changelog
+          uses: actions/upload-artifact@v4
+          with:
+            name: "${{ github.sha }} Changelog"
+            path: CHANGELOG.md        
