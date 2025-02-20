@@ -2,10 +2,6 @@ services:
   frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}
     build:
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha
       context: frontend
       args:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
@@ -60,9 +56,9 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
     build:
       cache_from:
-        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache
       cache_to:
-        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache,mode=max
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache,mode=max
       context: osm-rails
       dockerfile: Dockerfile.prod
       
@@ -74,9 +70,9 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${ENV}
     build:
       cache_from:
-        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:buildcache
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:buildcache
       cache_to:
-        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:buildcache,mode=max
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:buildcache,mode=max
       context: osm-cgimap
       dockerfile: docker/ubuntu/Dockerfile2404
 
