@@ -23,9 +23,6 @@ jobs:
             registry: ${{ vars.WS_DOCKER_REGISTRY }}
             username: ${{ vars.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
-                  
-        - name: Set commit SHA as code version
-          run: echo "CODE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
         - name: "Build Changelog"
           id: build_changelog
@@ -40,7 +37,8 @@ jobs:
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
-         
+              CODE_VERSION: ${{ github.sha }}
+              
               # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
               WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
@@ -54,6 +52,7 @@ jobs:
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
+              CODE_VERSION: ${{ github.sha }}
 
               # machine to deploy to 
               AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
