@@ -1,5 +1,10 @@
 # Contents of This Repo
 
+## Branch Strategy
+
+* **main**: day to day work goes here. 
+* **dev**: current code of the dev environment. No commits allowed directly; you'll need to open a PR from main. Committing/pushing here causes a deployment to the dev infrastructure. 
+
 ## Frontend Tier
 * ```frontend```: The Workspaces frontend (VueJS app).
   * Code here: https://github.com/TaskarCenterAtUW/workspaces-frontend.
