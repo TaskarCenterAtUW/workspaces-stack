@@ -1,5 +1,10 @@
 name: "Release"
 on:
+  push:
+    branches:
+      - dev
+      - stage
+
   workflow_dispatch:
     inputs:
       build_flag:
@@ -13,9 +18,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest 
-    name: Build, Push, Deploy (dev)
-    environment: "dev"
-    timeout-minutes: 45
+    name: Build, Push, Deploy
+    environment: ${{ github.ref_name }} 
+    timeout-minutes: 20
     steps:
         - uses: actions/checkout@v2
           with:
@@ -88,8 +93,8 @@ jobs:
               ssh-add ~/.ssh/github_actions		  
 
               echo Configuring docker context
-              docker context create dev --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
-              docker context use dev
+              docker context create ${{ vars.ENV }} --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
+              docker context use ${{ vars.ENV }}
 
               # remove images no longer in use--may need disk space to pull
               echo Pruning old docker images
