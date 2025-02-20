@@ -65,6 +65,12 @@ jobs:
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
 
+        - name: Release changelog
+          uses: actions/upload-artifact@v4
+          with:
+            name: "${{ github.sha }} Changelog"
+            path: CHANGELOG.md        
+
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
@@ -116,8 +122,4 @@ jobs:
               
               - uses: actions/upload-artifact@v4
               
-        - name: Release changelog
-          uses: actions/upload-artifact@v4
-          with:
-            name: "${{ github.sha }} Changelog"
-            path: CHANGELOG.md        
+       
