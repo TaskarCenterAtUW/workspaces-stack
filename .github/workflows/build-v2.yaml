@@ -34,7 +34,7 @@ jobs:
         - name: Build frontend
           uses: docker/build-push-action@v6
           with:
-            context: frontend
+            context: ./frontend
             push: true
             file: Dockerfile
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-frontend:${{ env.CODE_VERSION }}
@@ -42,7 +42,7 @@ jobs:
         - name: Build osm-cgimap
           uses: docker/build-push-action@v6
           with:
-            context: osm-cgimap
+            context: ./osm-cgimap
             push: true
             file: docker/ubuntu/Dockerfile2404
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-cgimap:${{ env.CODE_VERSION }}
@@ -51,7 +51,7 @@ jobs:
         - name: Build osm-log-proxy
           uses: docker/build-push-action@v6
           with:
-            context: osm-log-proxy
+            context: ./osm-log-proxy
             push: true
             file: Dockerfile
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-log-proxy:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-log-proxy:${{ env.CODE_VERSION }}
@@ -60,7 +60,7 @@ jobs:
         - name: Build osm-rails
           uses: docker/build-push-action@v6
           with:
-            context: osm-rails
+            context: ./osm-rails
             push: true
             file: Dockerfile.prod
             tags: ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-rails:${{ vars.ENV }}, ${{ vars.WS_DOCKER_REGISTRY }}/workspaces-osm-rails:${{ env.CODE_VERSION }}
