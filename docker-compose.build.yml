@@ -23,10 +23,6 @@ services:
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${ENV}
     build:
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha
       context: rapid
 
   rapid_tag:
@@ -36,10 +32,6 @@ services:
   pathways-editor:
     image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${ENV}
     build:
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha
       context: pathways-editor
 
   pathways-editor_tag:
@@ -49,10 +41,6 @@ services:
   osm-log-proxy:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${ENV}
     build:
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha
       context: osm-log-proxy
 
   osm-log-proxy_tag:
@@ -62,10 +50,6 @@ services:
   osm-web:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${ENV}
     build:
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha
       context: osm-web
 
   osm-web_tag:
@@ -76,9 +60,9 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
     build:
       cache_from:
-        - type=gha
+        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache
       cache_to:
-        - type=gha
+        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache,mode=max
       context: osm-rails
       dockerfile: Dockerfile.prod
       
@@ -90,9 +74,9 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${ENV}
     build:
       cache_from:
-        - type=gha
+        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:buildcache
       cache_to:
-        - type=gha
+        - type=registry,${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:buildcache,mode=max
       context: osm-cgimap
       dockerfile: docker/ubuntu/Dockerfile2404
 
@@ -103,10 +87,6 @@ services:
   tasks-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
     build:
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha
       context: tasking-manager
       dockerfile: ./scripts/docker/Dockerfile.frontend
       args:
@@ -121,10 +101,6 @@ services:
   tasks-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}
     build:
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha
       context: tasking-manager
       dockerfile: ./scripts/docker/Dockerfile.backend
       target: prod
