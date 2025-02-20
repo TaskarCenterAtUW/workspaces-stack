@@ -33,7 +33,7 @@ jobs:
               mode: "HYBRID"
                                                                                                                    
         - name: Build and push
-          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION}
+          run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --push --build-arg CODE_VERSION=${CODE_VERSION}
           env:
               ENV: ${{ vars.ENV }}
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
