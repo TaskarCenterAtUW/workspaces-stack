@@ -63,6 +63,9 @@ jobs:
           run: |
             rm -rf /tmp/.buildkit-cache
             mv /tmp/.buildkit-cache-new /tmp/.buildkit-cache
+
+        - name: Print changelog
+          run: echo ${{steps.build_changelog.outputs.changelog}}
             
         - name: Deploy
           env:
@@ -86,6 +89,7 @@ jobs:
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
           run: |
             mkdir -p ~/.ssh
+              echo Starting SSH agent
               eval `ssh-agent -s`
 
               ssh-keyscan ${{ vars.AZURE_DOCKER_HOST_IP }} >> ~/.ssh/known_hosts
@@ -94,6 +98,7 @@ jobs:
               chmod 600 ~/.ssh/github_actions
               ssh-add ~/.ssh/github_actions		  
 
+              echo Configuring docker context
               docker context create dev --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
               docker context use dev
 
@@ -105,12 +110,14 @@ jobs:
               #docker rmi $(docker images -q) 
 
               # remove images no longer in use--may need disk space to pull
+              echo Pruning old docker images
               docker image prune -a -f
 
               # pull new images, recreate containers
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
               
               # check what was deployed, just to save in the GH logs
+              echo Waiting for deployment to complete; listing deployed artifacts
               sleep 30s 
               docker ps 
 
