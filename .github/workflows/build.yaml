@@ -36,7 +36,7 @@ jobs:
           id: build_changelog
           uses: mikepenz/release-changelog-builder-action@v5
           with:
-              fromTag: "@~" # last commit
+              fromTag: "@~2" # last commit
               toTag: "@" # this commit
               mode: "PR"
               outputFile: "CHANGELOG.md"
@@ -64,6 +64,12 @@ jobs:
               WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
+
+        - name: Release changelog
+          uses: actions/upload-artifact@v4
+          with:
+            name: "${{ github.sha }} Changelog"
+            path: CHANGELOG.md        
 
         - name: Deploy
           env:
@@ -116,8 +122,4 @@ jobs:
               
               - uses: actions/upload-artifact@v4
               
-        - name: Release changelog
-          uses: actions/upload-artifact@v4
-          with:
-            name: "${{ github.sha }} Changelog"
-            path: CHANGELOG.md        
+       
