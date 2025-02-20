@@ -23,7 +23,7 @@
 
 ```docker-compose -f docker-compose.build.yml --env-file XXX.env build```
 
-```docker-compose --env-file XXX.env push```
+```docker-compose -f docker-compose.build.yml push```
 
 Replace XXX.env with the environment definition file of the environment for which you want to build an image. This can be overridden when running (see below). 
 
@@ -37,3 +37,7 @@ Replace XXX.env with the environment definition file of the environment for whic
 
 * ```example.env```: template of the .env file required by the Docker compose YAML files
 * ```tdei_uw.env```: .env for deployment at UW's TDEI center. Only UW should use this, new users should adapt example.env to suit their needs. LTG: remove this file from this repo. 
+
+# GH Actions
+
+See GitHub's actions tab in this repo for more deployment examples/steps. 

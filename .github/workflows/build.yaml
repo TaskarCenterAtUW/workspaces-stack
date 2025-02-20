@@ -1,5 +1,10 @@
 name: "Release"
 on:
+  push:
+    branches:
+      - dev
+      - stage
+
   workflow_dispatch:
     inputs:
       build_flag:
@@ -13,9 +18,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest 
-    name: Build, Push, Deploy (dev)
-    environment: "dev"
-    timeout-minutes: 45
+    name: Build, Push, Deploy
+    environment: ${{ github.ref_name }} 
+    timeout-minutes: 20
     steps:
         - uses: actions/checkout@v2
           with:
@@ -31,9 +36,9 @@ jobs:
           id: build_changelog
           uses: mikepenz/release-changelog-builder-action@v5
           with:
-              fromTag: "0.1"
               toTag: ${{ github.sha }}
               mode: "HYBRID"
+              outputFile: "CHANGELOG.md"
 
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
@@ -55,6 +60,9 @@ jobs:
               WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
               WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
               WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
+
+        - name: Print CHANGELOG.md
+          run: cat CHANGELOG.md
 
         - name: Deploy
           env:
@@ -88,8 +96,8 @@ jobs:
               ssh-add ~/.ssh/github_actions		  
 
               echo Configuring docker context
-              docker context create dev --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
-              docker context use dev
+              docker context create ${{ vars.ENV }} --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
+              docker context use ${{ vars.ENV }}
 
               # remove images no longer in use--may need disk space to pull
               echo Pruning old docker images
