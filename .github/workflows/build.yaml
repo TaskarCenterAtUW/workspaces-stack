@@ -31,6 +31,9 @@ jobs:
               fromTag: "0.1"
               toTag: ${{ github.sha }}
               mode: "HYBRID"
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v3
                                                                                                                    
         - name: Build and push
           run: docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --push --build-arg CODE_VERSION=${CODE_VERSION}
