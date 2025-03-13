@@ -56,11 +56,11 @@ jobs:
           env:
               ENV: ${{ vars.ENV }}
               CODE_VERSION: ${{ github.sha }}
-			  
+
               # hosts
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
               WS_POSM_DB_HOST: ${{ vars.WS_POSM_DB_HOST }}
-              
+
               # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
               WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
@@ -84,7 +84,7 @@ jobs:
               # hosts
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
               WS_POSM_DB_HOST: ${{ vars.WS_POSM_DB_HOST }}
-			                
+
               # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
               WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
