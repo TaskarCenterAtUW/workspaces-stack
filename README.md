@@ -3,7 +3,9 @@
 ### Branch Strategy
 
 * **main**: day to day work goes here. 
-* **dev**: current code of the dev environment. No commits allowed directly; you'll need to open a PR from main. Committing/pushing here causes a deployment to the dev infrastructure. 
+* **dev**: current code of the dev environment. No commits allowed directly; you'll need to open a PR from main (or your feature branch). Committing/pushing here causes a deployment to the dev infrastructure. 
+* **stage**: current code of the stage environment. No commits allowed directly; you'll need to open a PR from dev. Committing/pushing here causes a deployment to the stage infrastructure. 
+* **prod**: current code of the prod environment. No commits allowed directly; you'll need to open a PR from stage. Committing/pushing here causes a deployment to the prod infrastructure. 
 
 ### GH Actions
 
