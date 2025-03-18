@@ -1,5 +1,10 @@
 name: "Release"
 on:
+  push:
+    branches:
+      - dev
+      - stage
+
   workflow_dispatch:
     inputs:
       build_flag:
@@ -13,9 +18,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest 
-    name: Build, Push, Deploy (dev)
-    environment: "dev"
-    timeout-minutes: 45
+    name: Build, Push, Deploy
+    environment: ${{ github.ref_name }} 
+    timeout-minutes: 30
     steps:
         - uses: actions/checkout@v2
           with:
@@ -27,13 +32,19 @@ jobs:
             username: ${{ vars.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-        - name: "Build Changelog"
-          id: build_changelog
-          uses: mikepenz/release-changelog-builder-action@v5
-          with:
-              fromTag: "0.1"
-              toTag: ${{ github.sha }}
-              mode: "HYBRID"
+#        - name: Get last tag
+#          run: echo "TAG_LAST=$(git describe --tags --abbrev=0 --always)" >> $GITHUB_ENV
+
+#        - name: "Build Changelog"
+#          id: build_changelog
+#          uses: mikepenz/release-changelog-builder-action@v5
+#          with:
+#              toTag: "${{ github.ref }}"
+#              mode: "HYBRID"
+#              outputFile: "CHANGELOG.md"
+
+#        - name: Print CHANGELOG.md
+#          run: cat CHANGELOG.md
 
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
@@ -44,9 +55,12 @@ jobs:
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
-              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
               CODE_VERSION: ${{ github.sha }}
-              
+
+              # hosts
+              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
+              WS_POSM_DB_HOST: ${{ vars.WS_POSM_DB_HOST }}
+
               # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
               WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
@@ -59,7 +73,6 @@ jobs:
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
-              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
               CODE_VERSION: ${{ github.sha }}
 
               # machine to deploy to 
@@ -67,7 +80,11 @@ jobs:
 
               # tag to deploy
               WS_DOCKER_TAG: ${{ github.sha }}
-              
+
+              # hosts
+              WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
+              WS_POSM_DB_HOST: ${{ vars.WS_POSM_DB_HOST }}
+
               # passwords
               WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
               WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
@@ -88,8 +105,8 @@ jobs:
               ssh-add ~/.ssh/github_actions		  
 
               echo Configuring docker context
-              docker context create dev --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
-              docker context use dev
+              docker context create ${{ vars.ENV }} --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
+              docker context use ${{ vars.ENV }}
 
               # remove images no longer in use--may need disk space to pull
               echo Pruning old docker images
@@ -103,6 +120,5 @@ jobs:
               sleep 30s 
 
               echo Deploy list
-              docker ps 
-
-    
+              docker ps               
+       
