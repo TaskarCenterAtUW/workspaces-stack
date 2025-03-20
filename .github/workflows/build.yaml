@@ -4,6 +4,7 @@ on:
     branches:
       - dev
       - stage
+      - prod
 
   workflow_dispatch:
     inputs:
@@ -14,7 +15,7 @@ on:
         options:
           - ''
           - '--no-cache'
-        
+   
 jobs:
   build:
     runs-on: ubuntu-latest 
@@ -32,30 +33,27 @@ jobs:
             username: ${{ vars.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#        - name: Get last tag
-#          run: echo "TAG_LAST=$(git describe --tags --abbrev=0 --always)" >> $GITHUB_ENV
-
-#        - name: "Build Changelog"
-#          id: build_changelog
-#          uses: mikepenz/release-changelog-builder-action@v5
-#          with:
-#              toTag: "${{ github.ref }}"
-#              mode: "HYBRID"
-#              outputFile: "CHANGELOG.md"
-
-#        - name: Print CHANGELOG.md
-#          run: cat CHANGELOG.md
-
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
+
+        # see tdei_uw.env for why 
+        - name: Override ENV_NAME_PARAM for prod deployments
+          if: github.ref_name == 'prod'
+          run: echo "ENV_NAME_PARAM=" >> "$GITHUB_ENV"
+        - name: Override ENV_NAME_PARAM for dev or stage deployments
+          if: github.ref_name != 'prod'
+          env:
+              ENV: ${{ vars.ENV }}
+          run: echo "ENV_NAME_PARAM=-${ENV}" >> "$GITHUB_ENV"                                                                                                                   
                                                                                                                    
         - name: Build and push
-          run: | 
+          run: |
             docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
               CODE_VERSION: ${{ github.sha }}
+              ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # hosts
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -74,6 +72,7 @@ jobs:
           env:
               ENV: ${{ vars.ENV }}
               CODE_VERSION: ${{ github.sha }}
+              ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # machine to deploy to 
               AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
