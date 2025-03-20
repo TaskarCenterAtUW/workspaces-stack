@@ -36,15 +36,11 @@ jobs:
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
 
-        - name: Sets env vars for releases
-          env:
-            ENV: ${{ vars.ENV }}
+        # see tdei_uw.env for why 
+        - name: Override ENV_NAME_PARAM for prod deployments
+          if: github.ref_name == 'prod'
           run: |
-            if [[ $ENV == 'prod' ]]; then
-                echo "ENV_NAME_PARAM=" >> "$GITHUB_ENV"
-            else
-                echo "ENV_NAME_PARAM=-$ENV" >> "$GITHUB_ENV"
-            fi
+            echo "ENV_NAME_PARAM=" >> "$GITHUB_ENV"
                                                                                                                    
         - name: Build and push
           run: |
