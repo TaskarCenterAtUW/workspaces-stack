@@ -41,6 +41,14 @@ jobs:
           if: github.ref_name == 'prod'
           run: |
             echo "ENV_NAME_PARAM=" >> "$GITHUB_ENV"
+
+        # see tdei_uw.env for why 
+        - name: Override ENV_NAME_PARAM for dev or stage deployments
+          if: github.ref_name != 'prod'
+          env:
+              ENV: ${{ vars.ENV }}
+          run: |
+            echo "ENV_NAME_PARAM=-${ENV}" >> "$GITHUB_ENV"                                                                                                                   
                                                                                                                    
         - name: Build and push
           run: |
