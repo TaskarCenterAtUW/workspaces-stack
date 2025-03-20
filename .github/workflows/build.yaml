@@ -43,7 +43,7 @@ jobs:
           env:
               ENV: ${{ vars.ENV }}
               CODE_VERSION: ${{ github.sha }}
-              ENV_NAME_PARAM: "${{ vars.ENV == 'prod' && '' || -${{ENV}} }}"
+              ENV_NAME_PARAM: "${{ vars.ENV == 'prod' && '' || '-'${{ENV}} }}"
 
               # hosts
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -62,7 +62,7 @@ jobs:
           env:
               ENV: ${{ vars.ENV }}
               CODE_VERSION: ${{ github.sha }}
-              ENV_NAME_PARAM: "${{ vars.ENV == 'prod' && '' || -${{ENV}} }}"
+              ENV_NAME_PARAM: "${{ vars.ENV == 'prod' && '' || '-'${{ENV}} }}"
 
               # machine to deploy to 
               AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
