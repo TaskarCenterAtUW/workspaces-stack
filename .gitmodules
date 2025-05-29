@@ -10,10 +10,6 @@
 	path = osm-rails
 	url = git@github.com:TaskarCenterAtUW/workspaces-openstreetmap-website.git
 	branch = workspaces
-[submodule "frontend"]
-	path = frontend
-	url = git@github.com:TaskarCenterAtUW/workspaces-frontend.git
-	branch = temp-backup
 [submodule "rapid"]
 	path = rapid
 	url = git@github.com:TaskarCenterAtUW/workspaces-rapid.git

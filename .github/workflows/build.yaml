@@ -1,13 +1,16 @@
 name: "Release"
 on:
-  push:
-    branches:
-      - dev
-      - stage
-      - prod
-
   workflow_dispatch:
     inputs:
+      env:
+        description: 'Environment'     
+        default: 'dev'
+        type: choice
+        options:
+          - 'dev'
+          - 'stage'
+#          - 'prod'
+
       build_flag:
         description: 'Docker Build Flags'     
         default: ''
@@ -20,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest 
     name: Build, Push, Deploy
-    environment: ${{ github.ref_name }} 
+    environment: ${{github.event.inputs.env}}  
     timeout-minutes: 30
     steps:
         - uses: actions/checkout@v2
@@ -38,10 +41,10 @@ jobs:
 
         # see tdei_uw.env for why 
         - name: Override ENV_NAME_PARAM for prod deployments
-          if: github.ref_name == 'prod'
+          if: github.event.inputs.env == 'prod'
           run: echo "ENV_NAME_PARAM=" >> "$GITHUB_ENV"
         - name: Override ENV_NAME_PARAM for dev or stage deployments
-          if: github.ref_name != 'prod'
+          if: github.event.inputs.env != 'prod'
           env:
               ENV: ${{ vars.ENV }}
           run: echo "ENV_NAME_PARAM=-${ENV}" >> "$GITHUB_ENV"                                                                                                                   
