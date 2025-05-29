@@ -65,7 +65,7 @@ jobs:
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: ${{ env.FRONTEND_VERSION }}
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.FRONTEND_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # hosts
@@ -84,7 +84,7 @@ jobs:
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: ${{ env.FRONTEND_VERSION }}
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.FRONTEND_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # machine to deploy to 
