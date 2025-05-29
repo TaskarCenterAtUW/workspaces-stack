@@ -36,7 +36,6 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-frontend
                  path: frontend
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd frontend; /usr/bin/git log -1 --format='%h'                                                                                                                  
         - run: cd frontend; FRONTEND_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
 
