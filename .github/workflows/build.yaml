@@ -30,12 +30,15 @@ jobs:
           with:
             submodules: recursive
 
+        # frontend submod
         - uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-frontend
                  path: frontend
                  ref: refs/tags/${{github.event.inputs.env}}
-            
+        - run: cd frontend; FRONTEND_VERSION=`/usr/bin/git log -1 --format='%H'` >> "$GITHUB_ENV"                                                                                                                   
+
+
         - uses: docker/login-action@v3
           with:
             registry: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -55,10 +58,6 @@ jobs:
               ENV: ${{ vars.ENV }}
           run: echo "ENV_NAME_PARAM=-${ENV}" >> "$GITHUB_ENV"                                                                                                                   
                                    
-                                   
-                                   
-                                   
-                                                                                                                   
         - name: Build and push
           run: |
             docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
@@ -84,7 +83,7 @@ jobs:
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: ${{ github.sha }}
+              CODE_VERSION: "Frontend: ${{ env.FRONTEND_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # machine to deploy to 
