@@ -60,7 +60,7 @@ jobs:
                                    
         - name: Build and push
           run: |
-            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION="${CODE_VERSION}" ${{github.event.inputs.build_flag}} 
+            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
@@ -83,7 +83,7 @@ jobs:
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: "Frontend: ${{ env.FRONTEND_VERSION }}"
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # machine to deploy to 
