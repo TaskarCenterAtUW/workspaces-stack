@@ -73,6 +73,8 @@ services:
       - traefik.enable=true
       - traefik.http.middlewares.workspaces-backend-emulation.replacepathregex.regex=^/api/v1/(.*)
       - traefik.http.middlewares.workspaces-backend-emulation.replacepathregex.replacement=/api/v2/$$1/
+      - traefik.http.middlewares.workspaces-backend-emulation2.compress=true
+      - traefik.http.middlewares.workspaces-backend-emulation=workspaces-backend-emulation2,workspaces-backend-emulation
       - traefik.http.routers.workspaces-backend.rule=Host(`${WS_API_HOST}`)
       - traefik.http.services.workspaces-backend.loadbalancer.server.port=5000
       - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation
