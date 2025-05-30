@@ -58,9 +58,9 @@ jobs:
         - uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-pathways-editor
-                 path: pathways
+                 path: pathways-editor
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd pathways; echo PATHWAYS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd pathways-editor; echo PATHWAYS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # rapid submod
         - uses: actions/checkout@v2
