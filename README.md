@@ -1,3 +1,7 @@
+** NOTE! Submodules have been removed from this repo in favor of environment-named tags within each sub repo instead ** 
+
+What does this mean? Instead of checking in a new version of the submodule reference to, say, frontend, instead go to the repo (worksapces-frontend) and tag the release you wish to mark as for dev with the "dev" tag. Same with stage and prod. 
+
 # Dev Standards
 
 ### Branch Strategy
