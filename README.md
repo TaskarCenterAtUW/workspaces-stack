@@ -3,8 +3,9 @@
 ### ⚠️ Submodules have been removed from this repo in favor of environment-named tags within each sub repo instead! 
 TL;DR: Instead of checking in a new version of the submodule reference to, say, frontend, in this repo *instead* go to the sub repo (e.g. workspaces-frontend) and tag the release you wish to mark as for dev with the "dev" tag. Same with stage and prod. 
 
-### To Make A Release
+### To Make A Release Of The Full Stack
 
+0. Ensure all sub repos have the tag (dev, stage or prod) set properly for the environment you wish to deploy.
 1. Go to https://github.com/TaskarCenterAtUW/workspaces-stack/actions/workflows/build.yaml
 2. Choose "Run Workflow"
 3. Select the environment you wish to deploy. Use the workflow in the "main" branch.
