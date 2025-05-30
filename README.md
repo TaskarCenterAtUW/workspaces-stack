@@ -3,6 +3,12 @@
 ### ⚠️ Submodules have been removed from this repo in favor of environment-named tags within each sub repo instead! 
 TL;DR: Instead of checking in a new version of the submodule reference to, say, frontend, in this repo *instead* go to the sub repo (e.g. workspaces-frontend) and tag the release you wish to mark as for dev with the "dev" tag. Same with stage and prod. 
 
+### Tagging Policy
+
+For dev, tags can point to the main branch or any feature branches.
+
+For stage or prod, tags *should* (must!) point to a commit in the main branch!
+
 ### GH Actions
 
 See GitHub's actions tab in this repo for more deployment examples/steps. 
