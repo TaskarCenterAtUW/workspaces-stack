@@ -27,8 +27,8 @@ jobs:
     timeout-minutes: 30
     steps:
         - uses: actions/checkout@v2
-          with:
-            submodules: recursive
+#          with:
+#            submodules: recursive
 
         # frontend submod
         - uses: actions/checkout@v2
@@ -37,6 +37,46 @@ jobs:
                  path: frontend
                  ref: refs/tags/${{github.event.inputs.env}}
         - run: cd frontend; echo FRONTEND_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+
+        # osm-cgimap submod
+        - uses: actions/checkout@v2
+          with:
+                 repository: TaskarCenterAtUW/workspaces-cgimap
+                 path: osm-cgimap
+                 ref: refs/tags/${{github.event.inputs.env}}
+        - run: cd osm-cgimap; echo CGIMAP_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+
+        # osm-rails submod
+        - uses: actions/checkout@v2
+          with:
+                 repository: TaskarCenterAtUW/workspaces-openstreetmap-website
+                 path: osm-rails
+                 ref: refs/tags/${{github.event.inputs.env}}
+        - run: cd osm-rails; echo OSMRAILS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+
+        # pathways submod
+        - uses: actions/checkout@v2
+          with:
+                 repository: TaskarCenterAtUW/workspaces-pathways-editor
+                 path: pathways
+                 ref: refs/tags/${{github.event.inputs.env}}
+        - run: cd pathways; echo PATHWAYS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+
+        # rapid submod
+        - uses: actions/checkout@v2
+          with:
+                 repository: TaskarCenterAtUW/workspaces-rapid
+                 path: rapid
+                 ref: refs/tags/${{github.event.inputs.env}}
+        - run: cd rapid; echo RAPID_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+
+        # tasking-manager submod
+        - uses: actions/checkout@v2
+          with:
+                 repository: TaskarCenterAtUW/workspaces-tasking-manager
+                 path: tasking-manager
+                 ref: refs/tags/${{github.event.inputs.env}}
+        - run: cd tasking-manager; echo TM_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
 
         - uses: docker/login-action@v3
@@ -64,7 +104,7 @@ jobs:
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.FRONTEND_VERSION }}"
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # hosts
@@ -83,14 +123,14 @@ jobs:
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.FRONTEND_VERSION }}"
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # machine to deploy to 
               AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
 
               # tag to deploy
-              WS_DOCKER_TAG: ${{ github.sha }}
+              WS_DOCKER_TAG: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}"
 
               # hosts
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
