@@ -3,13 +3,6 @@ TL;DR: Instead of checking in a new version of the submodule reference to, say, 
 
 # Dev Standards
 
-### Branch Strategy
-
-* **main**: day to day work goes here. You must commit your feature branch here before deploying. If you're creating your own feature branch for new work, create from this. 
-* **dev**: current code of the dev environment. No commits allowed directly; you'll need to open a PR from main. Committing/pushing here causes a deployment to the dev infrastructure. 
-* **stage**: current code of the stage environment. No commits allowed directly; you'll need to open a PR from dev. Committing/pushing here causes a deployment to the stage infrastructure. 
-* **prod**: current code of the prod environment. No commits allowed directly; you'll need to open a PR from stage. Committing/pushing here causes a deployment to the prod infrastructure. 
-
 ### GH Actions
 
 See GitHub's actions tab in this repo for more deployment examples/steps. 
