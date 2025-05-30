@@ -31,7 +31,8 @@ jobs:
 #            submodules: recursive
 
         # frontend submod
-        - uses: actions/checkout@v2
+        - name: Checkout frontend
+          uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-frontend
                  path: frontend
@@ -39,7 +40,8 @@ jobs:
         - run: cd frontend; echo FRONTEND_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # osm-cgimap submod
-        - uses: actions/checkout@v2
+        - name: Checkout osm-cgimap
+          uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-cgimap
                  path: osm-cgimap
@@ -47,7 +49,8 @@ jobs:
         - run: cd osm-cgimap; echo CGIMAP_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # osm-rails submod
-        - uses: actions/checkout@v2
+        - name: Checkout osm-rails
+          uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-openstreetmap-website
                  path: osm-rails
@@ -55,7 +58,8 @@ jobs:
         - run: cd osm-rails; echo OSMRAILS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # pathways submod
-        - uses: actions/checkout@v2
+        - name: Checkout pathways-editor
+          uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-pathways-editor
                  path: pathways-editor
@@ -63,7 +67,8 @@ jobs:
         - run: cd pathways-editor; echo PATHWAYS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # rapid submod
-        - uses: actions/checkout@v2
+        - name: Checkout rapid
+          uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-rapid
                  path: rapid
@@ -71,7 +76,8 @@ jobs:
         - run: cd rapid; echo RAPID_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # tasking-manager submod
-        - uses: actions/checkout@v2
+        - name: Checkout tasking-manager
+          uses: actions/checkout@v2
           with:
                  repository: TaskarCenterAtUW/workspaces-tasking-manager
                  path: tasking-manager
