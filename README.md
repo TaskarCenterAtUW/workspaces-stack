@@ -18,6 +18,15 @@ For dev, tags can point to the main branch or any feature branches.
 
 For stage or prod, tags *should* (must!) point to a commit in the main branch!
 
+The repos this process pulls from are:
+
+* TaskarCenterAtUW/workspaces-frontend
+* TaskarCenterAtUW/workspaces-cgimap
+* TaskarCenterAtUW/workspaces-openstreetmap-website
+* TaskarCenterAtUW/workspaces-pathways-editor
+* TaskarCenterAtUW/workspaces-rapid
+* TaskarCenterAtUW/workspaces-tasking-manager
+
 ### GH Actions
 
 See GitHub's actions tab in this repo for more deployment examples/steps. 
