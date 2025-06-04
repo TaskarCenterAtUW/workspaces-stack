@@ -126,10 +126,6 @@ services:
       cache_to:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:buildcache,mode=max
       context: tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.backend
-      target: prod
-      args:
-        APP_UID: 1000
 
   tasks-backend_tag:
     extends: tasks-backend
