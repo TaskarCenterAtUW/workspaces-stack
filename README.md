@@ -27,6 +27,13 @@ The repos this process pulls from are:
 * TaskarCenterAtUW/workspaces-rapid
 * TaskarCenterAtUW/workspaces-tasking-manager
 
+We use lightweight tags to indicate the environment a specific commit will deploy to:
+```
+git checkout <commit-hash>
+git tag dev
+git push --tags -f
+```
+
 ### GH Actions
 
 See GitHub's actions tab in this repo for more deployment examples/steps. 
