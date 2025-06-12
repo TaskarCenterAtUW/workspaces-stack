@@ -9,7 +9,7 @@ on:
         options:
           - 'dev'
           - 'stage'
-#          - 'prod'
+          - 'prod'
 
       build_flag:
         description: 'Docker Build Flags'     
