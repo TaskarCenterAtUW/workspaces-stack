@@ -29,9 +29,10 @@ The repos this process pulls from are:
 
 We use lightweight tags to indicate the environment a specific commit will deploy to:
 ```
-git checkout <commit-hash>
-git tag dev
-git push --tags -f
+git checkout <commit-hash> (if work to be released isn't your working copy)
+git tag -d dev (to remove existing tag)
+git tag dev (set dev tag to HEAD commit)
+git push --tags -f (push commit to GH)
 ```
 
 ### GH Actions
