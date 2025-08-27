@@ -80,7 +80,8 @@ services:
       - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation
       - traefik.http.routers.workspaces-backend.entrypoints=websecure
       - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
-
+      - traefik.http.middlewares.workspaces-backend-emulation.headers.accesscontrolalloworiginlist=*
+      
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
     restart: always
