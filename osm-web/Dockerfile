@@ -1,3 +1,3 @@
-FROM rtsp/lighttpd:latest
+FROM nginx:stable-alpine
 
-COPY lighttpd.conf /etc/lighttpd/conf.d/06-osm.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
