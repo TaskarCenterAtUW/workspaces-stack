@@ -76,7 +76,12 @@ services:
       - traefik.http.routers.workspaces-backend.rule=Host(`${WS_API_HOST}`)
       - traefik.http.services.workspaces-backend.loadbalancer.server.port=5000
 
-      - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation
+      - traefik.http.middlewares.cors.headers.accesscontrolallowmethods=*
+      - traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=*
+      - traefik.http.middlewares.cors.headers.accesscontrolmaxage=100
+      - traefik.http.middlewares.cors.headers.addvaryheader=true
+
+      - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation,cors
       - traefik.http.routers.workspaces-backend.entrypoints=websecure
       - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
       
