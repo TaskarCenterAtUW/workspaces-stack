@@ -80,11 +80,8 @@ services:
       - traefik.http.middlewares.cors-ws-backend.headers.accesscontrolmaxage=100
       - traefik.http.middlewares.cors-ws-backend.headers.addvaryheader=true
 
-#      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
-#      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
       - traefik.http.middlewares.redirect-to-https.replacepathregex.regex=^/api/v1/(.*)
       - traefik.http.middlewares.redirect-to-https.replacepathregex.replacement=/api/v1/$$1/
-
 
       - traefik.http.routers.workspaces-backend.middlewares=cors-ws-backend,redirect-to-https 
       - traefik.http.routers.workspaces-backend.entrypoints=websecure
@@ -99,8 +96,10 @@ services:
       - traefik.http.middlewares.cors-rapid.headers.accesscontrolalloworiginlist=*
       - traefik.http.middlewares.cors-rapid.headers.accesscontrolmaxage=100
       - traefik.http.middlewares.cors-rapid.headers.addvaryheader=true
+
       - traefik.http.routers.rapid.rule=Host(`${WS_RAPID_HOST}`)
       - traefik.http.routers.rapid.middlewares=cors-rapid
+
       - traefik.http.services.rapid.loadbalancer.server.port=80
       - traefik.http.routers.rapid.entrypoints=websecure
       - traefik.http.routers.rapid.tls.certresolver=myresolver
@@ -114,8 +113,10 @@ services:
       - traefik.http.middlewares.cors-pathways.headers.accesscontrolalloworiginlist=*
       - traefik.http.middlewares.cors-pathways.headers.accesscontrolmaxage=100
       - traefik.http.middlewares.cors-pathways.headers.addvaryheader=true
+
       - traefik.http.routers.pathways-editor.rule=Host(`${WS_PATHWAYS_EDITOR_HOST}`)
       - traefik.http.routers.pathways-editor.middlewares=cors-pathways
+
       - traefik.http.services.pathways-editor.loadbalancer.server.port=80
       - traefik.http.routers.pathways-editor.entrypoints=websecure
       - traefik.http.routers.pathways-editor.tls.certresolver=myresolver
