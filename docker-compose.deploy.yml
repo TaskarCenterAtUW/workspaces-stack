@@ -80,8 +80,8 @@ services:
       - traefik.http.middlewares.cors-ws-backend.headers.accesscontrolmaxage=100
       - traefik.http.middlewares.cors-ws-backend.headers.addvaryheader=true
 
-      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
-      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
+#      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+#      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
       - traefik.http.middlewares.redirect-to-https.replacepathregex.regex=^/api/v1/(.*)
       - traefik.http.middlewares.redirect-to-https.replacepathregex.replacement=/api/v1/$$1/
 
