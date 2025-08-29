@@ -80,7 +80,10 @@ services:
       - traefik.http.middlewares.cors-ws-backend.headers.accesscontrolmaxage=100
       - traefik.http.middlewares.cors-ws-backend.headers.addvaryheader=true
 
-      - traefik.http.routers.workspaces-backend.middlewares=cors-ws-backend
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
+
+      - traefik.http.routers.workspaces-backend.middlewares=cors-ws-backend,redirect-to-https 
       - traefik.http.routers.workspaces-backend.entrypoints=websecure
       - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
       
