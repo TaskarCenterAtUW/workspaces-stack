@@ -81,7 +81,7 @@ services:
       - traefik.http.middlewares.cors.headers.accesscontrolmaxage=100
       - traefik.http.middlewares.cors.headers.addvaryheader=true
 
-      - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation,cors
+      - traefik.http.routers.workspaces-backend.middlewares=cors
       - traefik.http.routers.workspaces-backend.entrypoints=websecure
       - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
       
