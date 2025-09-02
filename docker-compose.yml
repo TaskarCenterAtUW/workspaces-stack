@@ -180,6 +180,16 @@ services:
       - traefik.http.services.workspaces-backend.loadbalancer.server.port=5000
       - traefik.http.routers.workspaces-backend.middlewares=workspaces-backend-emulation
 
+  leaderboard-frontend:
+    build:
+      context: ./leaderboard/frontend
+      dockerfile: Dockerfile
+
+  leaderboard-backend:
+    build:
+      context: ./leaderboard/backend
+      dockerfile: Dockerfile
+
 volumes:
   osm-rails-tmp:
   osm-rails-storage:

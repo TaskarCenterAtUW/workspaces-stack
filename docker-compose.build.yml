@@ -130,3 +130,15 @@ services:
   tasks-backend_tag:
     extends: tasks-backend
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
+
+  leaderboard-frontend:
+
+  leaderboard-frontend_tag:
+    extends: leaderboard-frontend
+    image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${CODE_VERSION}
+
+  leaderboard-backend:
+
+  leaderboard-backend_tag:
+    extends: leaderboard-backend
+    image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:${CODE_VERSION}

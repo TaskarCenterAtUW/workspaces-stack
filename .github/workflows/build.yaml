@@ -27,8 +27,6 @@ jobs:
     timeout-minutes: 30
     steps:
         - uses: actions/checkout@v2
-#          with:
-#            submodules: recursive
 
         # frontend submod
         - name: Checkout frontend
@@ -85,6 +83,16 @@ jobs:
         - run: cd tasking-manager; echo TM_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
 
+        # leaderboard submod
+        - name: Checkout leaderboard
+          uses: actions/checkout@v2
+          with:
+                 repository: TaskarCenterAtUW/workspaces-leaderboard
+                 path: leaderboard
+                 ref: refs/tags/${{github.event.inputs.env}}
+        - run: cd leaderboard; echo LB_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+
+
         - uses: docker/login-action@v3
           with:
             registry: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -110,7 +118,7 @@ jobs:
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}"
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # hosts
@@ -129,14 +137,14 @@ jobs:
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}"
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # machine to deploy to 
               AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
 
               # tag to deploy
-              WS_DOCKER_TAG: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}"
+              WS_DOCKER_TAG: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
 
               # hosts
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
