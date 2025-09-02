@@ -109,6 +109,11 @@ services:
     depends_on:
       - osm-rails
       - osm-cgimap
+    environment:
+      WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+      WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+      WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+      WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
     volumes:
       - ./osm-web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./osm-rails/public:/usr/share/nginx/html:ro
