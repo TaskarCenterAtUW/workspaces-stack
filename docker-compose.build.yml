@@ -132,12 +132,18 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
 
   leaderboard-frontend:
+    build:
+      context: ./leaderboard/frontend
+      dockerfile: Dockerfile
 
   leaderboard-frontend_tag:
     extends: leaderboard-frontend
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${CODE_VERSION}
 
   leaderboard-backend:
+    build:
+      context: ./leaderboard/backend
+      dockerfile: Dockerfile
 
   leaderboard-backend_tag:
     extends: leaderboard-backend
