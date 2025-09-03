@@ -138,7 +138,6 @@ services:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:buildcache
       cache_to:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:buildcache,mode=max
-    build:
       context: ./leaderboard/frontend
       dockerfile: Dockerfile
 
@@ -153,7 +152,6 @@ services:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:buildcache
       cache_to:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:buildcache,mode=max
-    build:
       context: ./leaderboard/backend
       dockerfile: Dockerfile
 
