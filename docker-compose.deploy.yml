@@ -191,8 +191,6 @@ services:
 
   leaderboard-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${WS_DOCKER_TAG}
-    ports:
-      - "80:80"
     labels:
       - traefik.enable=true
       - traefik.http.routers.tasks-backend.rule=Host(`${LB_FRONTEND_HOST}`)
@@ -202,8 +200,6 @@ services:
 
   leaderboard-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:${WS_DOCKER_TAG}
-    ports:
-      - "5000:5000"
     labels:
       - traefik.enable=true
       - traefik.http.routers.tasks-backend.rule=Host(`${LB_BACKEND_HOST}`)

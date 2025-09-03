@@ -132,6 +132,12 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
 
   leaderboard-frontend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${ENV}
+    build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:buildcache,mode=max
     build:
       context: ./leaderboard/frontend
       dockerfile: Dockerfile
@@ -141,6 +147,12 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${CODE_VERSION}
 
   leaderboard-backend:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:${ENV}
+    build:
+      cache_from:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:buildcache
+      cache_to:
+        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:buildcache,mode=max
     build:
       context: ./leaderboard/backend
       dockerfile: Dockerfile

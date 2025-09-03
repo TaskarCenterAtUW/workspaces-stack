@@ -189,12 +189,16 @@ services:
     build:
       context: ./leaderboard/frontend
       dockerfile: Dockerfile
-
+    ports:
+      - "80:80"
+      
   leaderboard-backend:
     build:
       context: ./leaderboard/backend
       dockerfile: Dockerfile
-
+    ports:
+      - "5000:5000"
+      
 volumes:
   osm-rails-tmp:
   osm-rails-storage:
