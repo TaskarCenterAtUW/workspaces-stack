@@ -26,8 +26,6 @@ x-osm-rails-base:
     - osm-rails-tmp:/app/tmp
     - osm-rails-storage:/app/storage
   tmpfs: /tmp/pids/
-  ports:
-    - "3000:3000"
   stdin_open: true
   tty: true
     
