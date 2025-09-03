@@ -81,12 +81,31 @@ services:
   # OSM website/OSM API
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
+    environment:
+        RAILS_ENV: production
+        SECRET_KEY_BASE: ${WS_OSM_SECRET_KEY_BASE}
+        WS_OSM_HOST: ${WS_OSM_HOST}
+        WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+        WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+        WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+        WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
+        WS_MAIL_NAME: ${WS_MAIL_NAME}
+        WS_MAIL_FROM: ${WS_MAIL_FROM}
+        WS_MAIL_CONTACT: ${WS_MAIL_CONTACT}
+        WS_MAIL_RETURN_PATH: ${WS_MAIL_RETURN_PATH}
+        WS_SMTP_DOMAIN: ${WS_SMTP_DOMAIN}
+        WS_SMTP_HOST: ${WS_SMTP_HOST}
+        WS_SMTP_PORT: ${WS_SMTP_PORT}
+        WS_SMTP_USER: ${WS_SMTP_USER}
+        WS_SMTP_PASS: ${WS_SMTP_PASS}
+        PIDFILE: /tmp/pids/server.pid
     build:
       cache_from:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache
       cache_to:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache,mode=max
       context: osm-rails
+      dockerfile: Dockerfile.prod
       
   osm-rails_tag:
     extends: osm-rails
