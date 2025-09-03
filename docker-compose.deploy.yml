@@ -26,10 +26,15 @@ x-osm-rails-base:
     - osm-rails-tmp:/app/tmp
     - osm-rails-storage:/app/storage
   tmpfs: /tmp/pids/
-
+  ports:
+    - "3000:3000"
+  stdin_open: true
+  tty: true
+    
 ################################################################################
 
 services:
+  # proxy
   reverse-proxy:
     image: traefik:v3.1
     restart: always
@@ -52,6 +57,7 @@ services:
       - --certificatesresolvers.myresolver.acme.email=${WS_MAIL_ACME}
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
 
+  # workspaces FE
   frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${WS_DOCKER_TAG}
     restart: always
@@ -62,6 +68,7 @@ services:
       - traefik.http.routers.frontend.entrypoints=websecure
       - traefik.http.routers.frontend.tls.certresolver=myresolver
 
+  # tasking manager as workspaces API
   backend:
     # Workspaces backend currently lives in the TM. Emulate a separate server for now:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
@@ -87,6 +94,7 @@ services:
       - traefik.http.routers.workspaces-backend.entrypoints=websecure
       - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
       
+  # workspaces editors
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
     restart: always
@@ -121,6 +129,8 @@ services:
       - traefik.http.routers.pathways-editor.entrypoints=websecure
       - traefik.http.routers.pathways-editor.tls.certresolver=myresolver
 
+  # for debugging only
+  #
   #osm-log-proxy:
   #  image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${WS_DOCKER_TAG}
   #  depends_on:
@@ -132,6 +142,7 @@ services:
   #      #  - traefik.http.routers.osm-log-proxy.entrypoints=websecure
   #      #  - traefik.http.routers.osm-log-proxy.tls.certresolver=myresolver
 
+  # workspaces APIs (OSM Rails and C-accelerated)
   osm-web:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${WS_DOCKER_TAG}
     restart: always
@@ -166,6 +177,7 @@ services:
       CGIMAP_MAP_NODES: ${WS_OSM_MAX_EXPORT_NODES}
       CGIMAP_MAP_AREA: ${WS_OSM_MAX_EXPORT_AREA}
 
+  # tasking manager (*not* Workspaces)
   tasks-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
     restart: always
@@ -189,23 +201,24 @@ services:
       - traefik.http.routers.tasks-backend.entrypoints=websecure
       - traefik.http.routers.tasks-backend.tls.certresolver=myresolver
 
+  # leaderboard FE/backend
   leaderboard-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${WS_DOCKER_TAG}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.tasks-backend.rule=Host(`${LB_FRONTEND_HOST}`)
-      - traefik.http.services.tasks-backend.loadbalancer.server.port=80
-      - traefik.http.routers.tasks-backend.entrypoints=websecure
-      - traefik.http.routers.tasks-backend.tls.certresolver=myresolver
+      - traefik.http.routers.leaderboard-frontend.rule=Host(`${LB_FRONTEND_HOST}`)
+      - traefik.http.services.leaderboard-frontend.loadbalancer.server.port=80
+      - traefik.http.routers.leaderboard-frontend.entrypoints=websecure
+      - traefik.http.routers.leaderboard-frontend.tls.certresolver=myresolver
 
   leaderboard-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:${WS_DOCKER_TAG}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.tasks-backend.rule=Host(`${LB_BACKEND_HOST}`)
-      - traefik.http.services.tasks-backend.loadbalancer.server.port=5000
-      - traefik.http.routers.tasks-backend.entrypoints=websecure
-      - traefik.http.routers.tasks-backend.tls.certresolver=myresolver
+      - traefik.http.routers.leaderboard-backend.rule=Host(`${LB_BACKEND_HOST}`)
+      - traefik.http.services.leaderboard-backend.loadbalancer.server.port=5000
+      - traefik.http.routers.leaderboard-backend.entrypoints=websecure
+      - traefik.http.routers.leaderboard-backend.tls.certresolver=myresolver
 
 volumes:
   osm-rails-tmp:
