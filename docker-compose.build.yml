@@ -95,19 +95,10 @@ services:
       cache_to:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache,mode=max
       context: osm-rails
-      dockerfile: Dockerfile.prod
       
   osm-rails_tag:
     extends: osm-rails
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${CODE_VERSION}
-
-    # these are necessary to have the build-stage tests against the DB succeed
-    # DO NOT REMOVE
-    environment:
-      WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
-      WS_OSM_DB_USER: ${WS_OSM_DB_USER}
-      WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
-      WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
 
   # C-accelerated OSM API
   osm-cgimap:
