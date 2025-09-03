@@ -18,6 +18,12 @@ on:
         options:
           - ''
           - '--no-cache'
+
+      build_module:
+        description: 'Docker Build Module'     
+        default: ''
+        type: string
+
    
 jobs:
   build:
@@ -114,7 +120,7 @@ jobs:
                                    
         - name: Build and push
           run: |
-            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
+            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} ${{github.event.inputs.build_module}} 
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
           env:
               ENV: ${{ vars.ENV }}
