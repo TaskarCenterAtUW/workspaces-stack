@@ -74,6 +74,11 @@ services:
 
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
+    environment:
+      WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+      WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+      WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+      WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
     build:
       cache_from:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache
