@@ -81,14 +81,6 @@ services:
   # OSM website/OSM API
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
-    
-    # these are necessary to have the build-stage tests against the DB succeed
-    # DO NOT REMOVE
-    environment:
-      WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
-      WS_OSM_DB_USER: ${WS_OSM_DB_USER}
-      WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
-      WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
     build:
       cache_from:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache
