@@ -59,6 +59,7 @@ services:
     extends: osm-log-proxy
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${CODE_VERSION}
 
+  # proxy for JSOM
   osm-web:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${ENV}
     build:
@@ -72,8 +73,12 @@ services:
     extends: osm-web
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-web:${CODE_VERSION}
 
+  # OSM website/OSM API
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
+    
+    # these are necessary to have the build-stage tests against the DB succeed
+    # DO NOT REMOVE
     environment:
       WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
       WS_OSM_DB_USER: ${WS_OSM_DB_USER}
@@ -91,6 +96,15 @@ services:
     extends: osm-rails
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${CODE_VERSION}
 
+    # these are necessary to have the build-stage tests against the DB succeed
+    # DO NOT REMOVE
+    environment:
+      WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+      WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+      WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+      WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
+
+  # C-accelerated OSM API
   osm-cgimap:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${ENV}
     build:
@@ -105,6 +119,7 @@ services:
     extends: osm-cgimap
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
+  # tasking manager
   tasks-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
     build:
@@ -123,6 +138,7 @@ services:
     extends: tasks-frontend
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
 
+  # tasking manager
   tasks-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}
     build:
@@ -136,6 +152,7 @@ services:
     extends: tasks-backend
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
 
+  # leaderboard FE/backend
   leaderboard-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${ENV}
     build:
