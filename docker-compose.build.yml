@@ -1,4 +1,6 @@
 services:
+    
+  # workspaces FE (Vue app)
   frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}
     build:
@@ -20,6 +22,7 @@ services:
     extends: frontend
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}
 
+  # rapid editor
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${ENV}
     build:
@@ -33,6 +36,7 @@ services:
     extends: rapid
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${CODE_VERSION}
 
+  # pathways editor
   pathways-editor:
     image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${ENV}
     build:
@@ -46,6 +50,7 @@ services:
     extends: pathways-editor
     image: ${WS_DOCKER_REGISTRY}/workspaces-pathways-editor:${CODE_VERSION}
 
+  # OSM logging proxy, for debugging only
   osm-log-proxy:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-log-proxy:${ENV}
     build:
