@@ -20,7 +20,12 @@ on:
           - '--no-cache'
 
       build_module:
-        description: 'Docker Build Module'     
+        description: 'Docker Build Target Module'     
+        default: ''
+        type: string
+
+      deploy_module:
+        description: 'Docker Deploy Target Module'     
         default: ''
         type: string
 
@@ -184,7 +189,7 @@ jobs:
               docker image prune -a -f
 
               # pull new images, recreate containers
-              docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
+              docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans ${{github.event.inputs.deploy_module}} 
               
               # check what was deployed, just to save in the GH logs
               echo Waiting for deployment to complete
