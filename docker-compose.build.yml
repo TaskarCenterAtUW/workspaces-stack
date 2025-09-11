@@ -133,23 +133,23 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
   # tasking manager
-  tasks-frontend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
-    build:
-      cache_from:
-        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache
-      cache_to:
-        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache,mode=max
-      context: tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.frontend
-      args:
-        TM_APP_API_URL: ${WS_TASKS_URL}
-        #TM_CONSUMER_KEY
-        #TM_CONSUMER_SECRET
+  # tasks-frontend:
+  #   image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
+  #   build:
+  #     cache_from:
+  #       - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache
+  #     cache_to:
+  #       - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache,mode=max
+  #     context: tasking-manager
+  #     dockerfile: ./scripts/docker/Dockerfile.frontend
+  #     args:
+  #       TM_APP_API_URL: ${WS_TASKS_URL}
+  #       #TM_CONSUMER_KEY
+  #       #TM_CONSUMER_SECRET
 
-  tasks-frontend_tag:
-    extends: tasks-frontend
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
+  # tasks-frontend_tag:
+  #   extends: tasks-frontend
+  #   image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
 
   # tasking manager
   tasks-backend:
