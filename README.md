@@ -20,12 +20,13 @@ For stage or prod, tags *should* (must!) point to a commit in the main branch!
 
 The repos this process pulls from are:
 
-* TaskarCenterAtUW/workspaces-frontend
-* TaskarCenterAtUW/workspaces-cgimap
-* TaskarCenterAtUW/workspaces-openstreetmap-website
-* TaskarCenterAtUW/workspaces-pathways-editor
-* TaskarCenterAtUW/workspaces-rapid
-* TaskarCenterAtUW/workspaces-tasking-manager
+* [TaskarCenterAtUW/workspaces-frontend](https://github.com/TaskarCenterAtUW/workspaces-frontend)
+* [TaskarCenterAtUW/workspaces-cgimap](https://github.com/TaskarCenterAtUW/workspaces-cgimap)
+* [TaskarCenterAtUW/workspaces-openstreetmap-website](https://github.com/TaskarCenterAtUW/workspaces-openstreetmap-website)
+* [TaskarCenterAtUW/workspaces-pathways-editor](https://github.com/TaskarCenterAtUW/workspaces-pathways-editor)
+* [TaskarCenterAtUW/workspaces-rapid](https://github.com/TaskarCenterAtUW/workspaces-rapid)
+* [TaskarCenterAtUW/workspaces-tasking-manager](https://github.com/TaskarCenterAtUW/workspaces-tasking-manager)
+* [TaskarCenterAtUW/workspaces-leaderboard](https://github.com/TaskarCenterAtUW/workspaces-leaderboard)
 
 We use lightweight tags to indicate the environment a specific commit will deploy to:
 ```
