@@ -19,6 +19,7 @@ on:
           - ''
           - '--no-cache'
 
+run-name: Release for ${{github.event.inputs.env}}  
 jobs:
   build:
     runs-on: ubuntu-latest 
