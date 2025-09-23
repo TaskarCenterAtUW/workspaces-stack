@@ -1,5 +1,4 @@
 services:
-    
   # workspaces FE (Vue app)
   frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${ENV}
@@ -17,6 +16,9 @@ services:
         VITE_RAPID_URL: ${WS_RAPID_URL}
         VITE_PATHWAYS_EDITOR_URL: ${WS_PATHWAYS_EDITOR_URL}
         VITE_IMAGERY_SCHEMA: ${WS_IMAGERY_SCHEMA}
+        VITE_IMAGERY_EXAMPLE_URL: ${WS_IMAGERY_EXAMPLE_URL}
+        VITE_LONG_FORM_QUEST_SCHEMA: ${WS_LONG_FORM_QUEST_SCHEMA}
+        VITE_LONG_FORM_QUEST_EXAMPLE_URL: ${WS_LONG_FORM_QUEST_EXAMPLE_URL}
         CODE_VERSION: ${CODE_VERSION}
 
   frontend_tag:
@@ -112,7 +114,7 @@ services:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache,mode=max
       context: osm-rails
       dockerfile: Dockerfile.prod
-      
+
   osm-rails_tag:
     extends: osm-rails
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${CODE_VERSION}
@@ -133,23 +135,23 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
   # tasking manager
-  tasks-frontend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
-    build:
-      cache_from:
-        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache
-      cache_to:
-        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache,mode=max
-      context: tasking-manager
-      dockerfile: ./scripts/docker/Dockerfile.frontend
-      args:
-        TM_APP_API_URL: ${WS_TASKS_URL}
-        #TM_CONSUMER_KEY
-        #TM_CONSUMER_SECRET
+  # tasks-frontend:
+  #   image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
+  #   build:
+  #     cache_from:
+  #       - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache
+  #     cache_to:
+  #       - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache,mode=max
+  #     context: tasking-manager
+  #     dockerfile: ./scripts/docker/Dockerfile.frontend
+  #     args:
+  #       TM_APP_API_URL: ${WS_TASKS_URL}
+  #       #TM_CONSUMER_KEY
+  #       #TM_CONSUMER_SECRET
 
-  tasks-frontend_tag:
-    extends: tasks-frontend
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
+  # tasks-frontend_tag:
+  #   extends: tasks-frontend
+  #   image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
 
   # tasking manager
   tasks-backend:

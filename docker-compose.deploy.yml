@@ -176,15 +176,15 @@ services:
       CGIMAP_MAP_AREA: ${WS_OSM_MAX_EXPORT_AREA}
 
   # tasking manager (*not* Workspaces)
-  tasks-frontend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
-    restart: always
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.tasks-frontend.rule=Host(`${WS_TASKS_HOST}`)
-      - traefik.http.services.tasks-frontend.loadbalancer.server.port=80
-      - traefik.http.routers.tasks-frontend.entrypoints=websecure
-      - traefik.http.routers.tasks-frontend.tls.certresolver=myresolver
+  # tasks-frontend:
+  #   image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${WS_DOCKER_TAG}
+  #   restart: always
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.tasks-frontend.rule=Host(`${WS_TASKS_HOST}`)
+  #     - traefik.http.services.tasks-frontend.loadbalancer.server.port=80
+  #     - traefik.http.routers.tasks-frontend.entrypoints=websecure
+  #     - traefik.http.routers.tasks-frontend.tls.certresolver=myresolver
 
   tasks-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}

@@ -20,12 +20,13 @@ For stage or prod, tags *should* (must!) point to a commit in the main branch!
 
 The repos this process pulls from are:
 
-* TaskarCenterAtUW/workspaces-frontend
-* TaskarCenterAtUW/workspaces-cgimap
-* TaskarCenterAtUW/workspaces-openstreetmap-website
-* TaskarCenterAtUW/workspaces-pathways-editor
-* TaskarCenterAtUW/workspaces-rapid
-* TaskarCenterAtUW/workspaces-tasking-manager
+* [TaskarCenterAtUW/workspaces-frontend](https://github.com/TaskarCenterAtUW/workspaces-frontend)
+* [TaskarCenterAtUW/workspaces-cgimap](https://github.com/TaskarCenterAtUW/workspaces-cgimap)
+* [TaskarCenterAtUW/workspaces-openstreetmap-website](https://github.com/TaskarCenterAtUW/workspaces-openstreetmap-website)
+* [TaskarCenterAtUW/workspaces-pathways-editor](https://github.com/TaskarCenterAtUW/workspaces-pathways-editor)
+* [TaskarCenterAtUW/workspaces-rapid](https://github.com/TaskarCenterAtUW/workspaces-rapid)
+* [TaskarCenterAtUW/workspaces-tasking-manager](https://github.com/TaskarCenterAtUW/workspaces-tasking-manager)
+* [TaskarCenterAtUW/workspaces-leaderboard](https://github.com/TaskarCenterAtUW/workspaces-leaderboard)
 
 We use lightweight tags to indicate the environment a specific commit will deploy to:
 ```
@@ -58,7 +59,7 @@ See GitHub's actions tab in this repo for more deployment examples/steps.
     * ```osm-cgimap```: Faster version of osm-rails. API format the same as osm-rails. Only some functions of osm-rails. 
 * ```tasking-manager```: Not currently using, but task manager for OSM. 
 
-# Getting Started
+# Getting Started (Possibly Outdated; See Individual Repos)
 
 ### To build images for deploy
 
@@ -81,7 +82,7 @@ Replace XXX.env with the environment definition file of the environment for whic
 * ```example.env```: template of the .env file required by the Docker compose YAML files
 * ```tdei_uw.env```: .env for deployment at UW's TDEI center. Only UW should use this, new users should adapt example.env to suit their needs. LTG: remove this file from this repo.
 
-# Local Development
+# Local Development (Possibly Outdated; See Individual Repos)
 
 ### To build images for local development
 
