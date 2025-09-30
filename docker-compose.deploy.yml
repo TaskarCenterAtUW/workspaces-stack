@@ -211,6 +211,12 @@ services:
 
   leaderboard-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:${WS_DOCKER_TAG}
+    environment:
+      WS_OSM_HOST: ${WS_OSM_HOST}
+      WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+      WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+      WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+      WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
     labels:
       - traefik.enable=true
       - traefik.http.routers.leaderboard-backend.rule=Host(`${LB_BACKEND_HOST}`)
