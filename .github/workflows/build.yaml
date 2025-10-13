@@ -120,7 +120,7 @@ jobs:
                 IMAGE_NAME=`echo ${IMAGE_PATH} | cut -d '/' -f 2 | cut -d ':' -f 1`
                 TAG="$CODE_VERSION"
                 
-                if [ $(az acr repository show-tags --name opensidewalksdev --repository $image | grep -o $TAG) == "$TAG" ]; then
+                if [ $(az acr repository show-tags --name opensidewalksdev --repository $IMAGE_PATH | grep -o $TAG) == "$TAG" ]; then
                     echo "Image already exists for $IMAGE_PATH, not building again"
                 else
                     echo "Image does not exist at $IMAGE_PATH, building and pushing"
