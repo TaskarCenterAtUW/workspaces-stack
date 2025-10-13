@@ -39,6 +39,8 @@ jobs:
         - run: cd frontend; echo FRONTEND_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # osm-cgimap submod
+        
+        # cgi-map submod
         - name: Checkout osm-cgimap
           uses: actions/checkout@v2
           with:
