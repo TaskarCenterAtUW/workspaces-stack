@@ -1,0 +1,32 @@
+#
+# This file provides a way to override personal configuration options along
+# with the main Compose file for local development. Docker will merge these
+# definitions with the main file.
+#
+# Copy: docker-compose.override.example.yml
+# ..to: docker-compose.override.yml
+#
+# ...and adjust services below as needed. The examples shown below are not
+# exhaustive.
+#
+
+name: tdei-workspaces
+
+services:
+  frontend:
+    # Run the container as your local user so that file permissions match.
+    #
+    # The default UID for MacOS is typically 501. For Linux, this is typically
+    # 1000. Run `id -u` to confirm.
+    #
+    user: 501
+
+  tasks-backend:
+    # Build the container as your local user so that file permissions match.
+    #
+    # The default UID for MacOS is typically 501. For Linux, this is typically
+    # 1000. Run `id -u` to confirm.
+    #
+    build:
+      args:
+        APP_UID: 501
