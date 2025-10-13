@@ -117,7 +117,7 @@ jobs:
             
             for IMAGE_PATH in `docker compose -f docker-compose.build.yml config --images`;
             do
-                IMAGE_NAME=`echo ${IMAGE_PATH} | cut -d '/' -f 2`
+                IMAGE_NAME=`echo ${IMAGE_PATH} | cut -d '/' -f 2 | cut -d ':' -f 1`
                 TAG="$CODE_VERSION"
                 
                 if [ $(az acr repository show-tags --name opensidewalksdev --repository $image | grep -o $TAG) == "$TAG" ]; then
