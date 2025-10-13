@@ -115,6 +115,7 @@ jobs:
           run: |
             set -x
             
+            az acr login -n opensidewalksdev
             for IMAGE_PATH in `docker compose -f docker-compose.build.yml config --images`;
             do
                 IMAGE_NAME=`echo ${IMAGE_PATH} | cut -d '/' -f 2 | cut -d ':' -f 1`
