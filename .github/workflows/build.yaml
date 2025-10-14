@@ -39,8 +39,6 @@ jobs:
         - run: cd frontend; echo FRONTEND_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
         # osm-cgimap submod
-        
-        # cgi-map submod
         - name: Checkout osm-cgimap
           uses: actions/checkout@v2
           with:
@@ -85,6 +83,7 @@ jobs:
                  ref: refs/tags/${{github.event.inputs.env}}
         - run: cd tasking-manager; echo TM_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
+
         # leaderboard submod
         - name: Checkout leaderboard
           uses: actions/checkout@v2
@@ -93,6 +92,7 @@ jobs:
                  path: leaderboard
                  ref: refs/tags/${{github.event.inputs.env}}
         - run: cd leaderboard; echo LB_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+
 
         - uses: docker/login-action@v3
           with:
@@ -115,23 +115,9 @@ jobs:
                                    
         - name: Build and push
           run: |
-            set -x
-            
-            #for IMAGE_PATH in `docker compose -f docker-compose.build.yml config --images`;
-            #do
-            #    IMAGE_NAME=`echo ${IMAGE_PATH} | cut -d '/' -f 2 | cut -d ':' -f 1`
-            #    TAG="$CODE_VERSION"
-                
-            #    if az acr repository show-tags --username ${{ vars.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} --name opensidewalksdev --repository $IMAGE_NAME | grep -o $TAG; then
-            #        echo "Image already exists for $IMAGE_PATH, not building again"
-            #    else
-            #        echo "Image does not exist at $IMAGE_PATH, building and pushing"
-                    
-                    docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
-                    docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
-            #    fi
-            #done
-
+            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
+              docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
+              
           env:
               ENV: ${{ vars.ENV }}
               CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
