@@ -181,6 +181,12 @@ services:
   leaderboard-frontend_tag:
     extends: leaderboard-frontend
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${CODE_VERSION}
+    build:
+      args:
+        VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
+        VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
+        VITE_API_URL: ${WS_API_URL}
+        VITE_OSM_URL: ${WS_OSM_URL}
 
   leaderboard-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:${ENV}

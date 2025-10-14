@@ -202,11 +202,6 @@ services:
   # leaderboard FE/backend
   leaderboard-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${WS_DOCKER_TAG}
-    environment:
-      VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
-      VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
-      VITE_API_URL: ${WS_API_URL}
-      VITE_OSM_URL: ${WS_OSM_URL}
     labels:
       - traefik.enable=true
       - traefik.http.routers.leaderboard-frontend.rule=Host(`${LB_FRONTEND_HOST}`)
