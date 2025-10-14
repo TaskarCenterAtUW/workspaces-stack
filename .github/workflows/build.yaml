@@ -127,8 +127,8 @@ jobs:
                 else
                     echo "Image does not exist at $IMAGE_PATH, building and pushing"
                     
-                    #docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
-                    #docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
+                    docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
+                    docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
                 fi
             done
 
