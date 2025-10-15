@@ -123,9 +123,9 @@ jobs:
                 IMAGE="$IMAGE_TEMPLATE$CODE_VERSION"
                 
                 if az acr repository show-tags --username ${{ vars.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} --name opensidewalksdev --repository $IMAGE_NAME | grep -o $CODE_VERSION; then
-                    echo "Image already exists for $IMAGE_PATH, not building again"
+                    echo "Image already exists for $IMAGE, not building again"
                 else
-                    echo "Image does not exist at $IMAGE_PATH, building and pushing"
+                    echo "Image does not exist at $IMAGE, building and pushing"
                     
                     docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} $SERVICE_NAME
                     docker compose -f docker-compose.build.yml --env-file tdei_uw.env push $SERVICE_NAME
