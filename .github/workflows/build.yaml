@@ -83,7 +83,6 @@ jobs:
                  ref: refs/tags/${{github.event.inputs.env}}
         - run: cd tasking-manager; echo TM_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
 
-
         # leaderboard submod
         - name: Checkout leaderboard
           uses: actions/checkout@v2
@@ -92,7 +91,6 @@ jobs:
                  path: leaderboard
                  ref: refs/tags/${{github.event.inputs.env}}
         - run: cd leaderboard; echo LB_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
-
 
         - uses: docker/login-action@v3
           with:
@@ -115,8 +113,24 @@ jobs:
                                    
         - name: Build and push
           run: |
-            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
-              docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
+            set -x
+            
+            for JSON_CONFIG in `docker compose -f docker-compose.build.yml config --format json | jq -c '.services|to_entries[]'`;
+            do
+                SERVICE_NAME=`echo $JSON_CONFIG | jq -r '.key'`
+                IMAGE_TEMPLATE=`jq -r '.value.image'`
+                IMAGE_NAME=`echo $IMAGE_TEMPLATE | cut -d "/" -f 2 | cut -d ":" -f 1`
+                IMAGE="$IMAGE_TEMPLATE$CODE_VERSION"
+                
+                if az acr repository show-tags --username ${{ vars.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} --name opensidewalksdev --repository $IMAGE_NAME | grep -o $CODE_VERSION; then
+                    echo "Image already exists for $IMAGE_PATH, not building again"
+                else
+                    echo "Image does not exist at $IMAGE_PATH, building and pushing"
+                    
+                    docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} $SERVICE_NAME
+                    docker compose -f docker-compose.build.yml --env-file tdei_uw.env push $SERVICE_NAME
+                fi
+            done              
               
           env:
               ENV: ${{ vars.ENV }}
