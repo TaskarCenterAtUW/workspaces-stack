@@ -118,7 +118,7 @@ jobs:
             for JSON_CONFIG in `docker compose -f docker-compose.build.yml config --format json | jq -c '.services|to_entries[]'`;
             do
                 SERVICE_NAME=`echo $JSON_CONFIG | jq -r '.key'`
-                IMAGE_TEMPLATE=`jq -r '.value.image'`
+                IMAGE_TEMPLATE=`echo $JSON_CONFIG | jq -r '.value.image'`
                 IMAGE_NAME=`echo $IMAGE_TEMPLATE | cut -d "/" -f 2 | cut -d ":" -f 1`
                 IMAGE="$IMAGE_TEMPLATE$CODE_VERSION"
                 
