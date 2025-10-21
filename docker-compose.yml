@@ -53,6 +53,10 @@ services:
       VITE_OSM_URL: ${WS_OSM_URL}
       VITE_RAPID_URL: ${WS_RAPID_URL}
       VITE_PATHWAYS_EDITOR_URL: ${WS_PATHWAYS_EDITOR_URL}
+      VITE_IMAGERY_SCHEMA: ${WS_IMAGERY_SCHEMA_URL}
+      VITE_IMAGERY_EXAMPLE_URL: ${WS_IMAGERY_EXAMPLE_URL}
+      VITE_LONG_FORM_QUEST_SCHEMA: ${WS_LONG_FORM_QUEST_SCHEMA_URL}
+      VITE_LONG_FORM_QUEST_EXAMPLE_URL: ${WS_LONG_FORM_QUEST_EXAMPLE_URL}
     volumes:
       - ./frontend:/app
     labels:
@@ -172,6 +176,8 @@ services:
     env_file: tasking-manager/tasking-manager.env
     environment:
       GEVENT_SUPPORT: true
+      WS_LONGFORM_SCHEMA_URL: ${WS_LONG_FORM_QUEST_SCHEMA_URL}
+      WS_IMAGERY_SCHEMA_URL: ${WS_IMAGERY_SCHEMA_URL}
     ports:
       - "5678:5678" # debugpy debugger port
     volumes:

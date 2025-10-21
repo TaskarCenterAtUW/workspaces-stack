@@ -28,7 +28,7 @@ x-osm-rails-base:
   tmpfs: /tmp/pids/
   stdin_open: true
   tty: true
-    
+
 ################################################################################
 
 services:
@@ -74,6 +74,8 @@ services:
     env_file: tasking-manager/tasking-manager.env
     environment:
       GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
+      WS_LONGFORM_SCHEMA_URL: ${WS_LONG_FORM_QUEST_SCHEMA_URL}
+      WS_IMAGERY_SCHEMA_URL: ${WS_IMAGERY_SCHEMA_URL}
     labels:
       - traefik.enable=true
       - traefik.http.routers.workspaces-backend.rule=Host(`${WS_API_HOST}`)
@@ -88,10 +90,10 @@ services:
       - traefik.http.middlewares.redirect-to-https.replacepathregex.regex=^/api/v1/(.*)
       - traefik.http.middlewares.redirect-to-https.replacepathregex.replacement=/api/v1/$$1/
 
-      - traefik.http.routers.workspaces-backend.middlewares=cors-ws-backend,redirect-to-https 
+      - traefik.http.routers.workspaces-backend.middlewares=cors-ws-backend,redirect-to-https
       - traefik.http.routers.workspaces-backend.entrypoints=websecure
       - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
-      
+
   # workspaces editors
   rapid:
     image: ${WS_DOCKER_REGISTRY}/workspaces-rapid:${WS_DOCKER_TAG}
