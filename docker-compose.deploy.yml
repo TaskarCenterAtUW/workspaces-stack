@@ -202,6 +202,7 @@ services:
   # leaderboard FE/backend
   leaderboard-frontend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:${WS_DOCKER_TAG}
+    restart: always
     labels:
       - traefik.enable=true
       - traefik.http.routers.leaderboard-frontend.rule=Host(`${LB_FRONTEND_HOST}`)
@@ -211,6 +212,7 @@ services:
 
   leaderboard-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-leaderboard-backend:${WS_DOCKER_TAG}
+    restart: always
     environment:
       WS_OSM_HOST: ${WS_OSM_HOST}
       WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
