@@ -23,6 +23,9 @@ run-name: Release for ${{github.event.inputs.env}}
 jobs:
   build:
     runs-on: ubuntu-latest 
+    concurrency:
+      group: deploy
+      cancel-in-progress: false
     name: Build, Push, Deploy
     environment: ${{github.event.inputs.env}}  
     timeout-minutes: 30
