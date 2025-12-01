@@ -146,6 +146,7 @@ services:
       context: osm-cgimap
       dockerfile: docker/ubuntu/Dockerfile2404
     environment:
+      CGIMAP_INSTANCES: ${WS_CGIMAP_INSTANCES}
       CGIMAP_HOST: ${WS_OSM_DB_HOST}
       CGIMAP_USERNAME: ${WS_OSM_DB_USER}
       CGIMAP_PASSWORD: ${WS_OSM_DB_PASS}

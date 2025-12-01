@@ -168,6 +168,7 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${WS_DOCKER_TAG}
     restart: always
     environment:
+      CGIMAP_INSTANCES: ${WS_CGIMAP_INSTANCES}
       CGIMAP_HOST: ${WS_OSM_DB_HOST}
       CGIMAP_USERNAME: ${WS_OSM_DB_USER}
       CGIMAP_PASSWORD: ${WS_OSM_DB_PASS}
