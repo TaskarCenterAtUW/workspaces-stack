@@ -5,3 +5,10 @@ dev.env
 stage.env
 prod.env
 
+frontend/
+leaderboard/
+osm-cgimap/
+osm-rails/
+pathways-editor/
+rapid/
+tasking-manager/

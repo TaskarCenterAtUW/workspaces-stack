@@ -118,7 +118,7 @@ jobs:
                                    
         - name: Build and push
           run: |
-            docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
+              docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
               docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
               
           env:
@@ -131,13 +131,13 @@ jobs:
               WS_POSM_DB_HOST: ${{ vars.WS_POSM_DB_HOST }}
 
               # passwords
-              WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
-              WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
-              WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
-              WS_OSM_SECRET_KEY_BASE: ${{ secrets.WS_OSM_SECRET_KEY_BASE }}
-              WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
-              WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
-              WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
+              #WS_API_DB_PASS: ${{ secrets.WS_API_DB_PASS }}
+              #WS_MAPBOX_ACCESS_TOKEN: ${{ secrets.WS_MAPBOX_ACCESS_TOKEN }}
+              #WS_OSM_DB_PASS: ${{ secrets.WS_OSM_DB_PASS }}
+              #WS_OSM_SECRET_KEY_BASE: ${{ secrets.WS_OSM_SECRET_KEY_BASE }}
+              #WS_SMTP_PASS: ${{ secrets.WS_SMTP_PASS }}
+              #WS_TASKS_DB_PASS: ${{ secrets.WS_TASKS_DB_PASS }}
+              #WS_TASKS_SECRET_KEY: ${{ secrets.WS_TASKS_SECRET_KEY }}
 
         - name: Deploy
           env:
