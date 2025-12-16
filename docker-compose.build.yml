@@ -8,6 +8,8 @@ services:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-frontend:buildcache
       cache_to:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-frontend:buildcache,mode=max
+
+      # these get baked into the JavaScript at build time--so ARGS not ENVS
       args:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
         VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
@@ -84,30 +86,32 @@ services:
   # OSM website/OSM API
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
-    environment:
-        RAILS_ENV: production
-        SECRET_KEY_BASE: ${WS_OSM_SECRET_KEY_BASE}
-        WS_OSM_HOST: ${WS_OSM_HOST}
-        WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
-        WS_OSM_DB_USER: ${WS_OSM_DB_USER}
-        WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
-        WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
-        WS_MAIL_NAME: ${WS_MAIL_NAME}
-        WS_MAIL_FROM: ${WS_MAIL_FROM}
-        WS_MAIL_CONTACT: ${WS_MAIL_CONTACT}
-        WS_MAIL_RETURN_PATH: ${WS_MAIL_RETURN_PATH}
-        WS_SMTP_DOMAIN: ${WS_SMTP_DOMAIN}
-        WS_SMTP_HOST: ${WS_SMTP_HOST}
-        WS_SMTP_PORT: ${WS_SMTP_PORT}
-        WS_SMTP_USER: ${WS_SMTP_USER}
-        WS_SMTP_PASS: ${WS_SMTP_PASS}
-        PIDFILE: /tmp/pids/server.pid
+#    environment:
+#        RAILS_ENV: production
+#        SECRET_KEY_BASE: ${WS_OSM_SECRET_KEY_BASE}
+#        WS_OSM_HOST: ${WS_OSM_HOST}
+#        WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+#        WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+#        WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+#        WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
+#        WS_MAIL_NAME: ${WS_MAIL_NAME}
+#        WS_MAIL_FROM: ${WS_MAIL_FROM}
+#        WS_MAIL_CONTACT: ${WS_MAIL_CONTACT}
+#        WS_MAIL_RETURN_PATH: ${WS_MAIL_RETURN_PATH}
+#        WS_SMTP_DOMAIN: ${WS_SMTP_DOMAIN}
+#        WS_SMTP_HOST: ${WS_SMTP_HOST}
+#        WS_SMTP_PORT: ${WS_SMTP_PORT}
+#        WS_SMTP_USER: ${WS_SMTP_USER}
+#        WS_SMTP_PASS: ${WS_SMTP_PASS}
+#        PIDFILE: /tmp/pids/server.pid
+
     build:
-      args:
-        WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
-        WS_OSM_DB_USER: ${WS_OSM_DB_USER}
-        WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
-        WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
+#      args:
+#        WS_OSM_DB_HOST: ${WS_OSM_DB_HOST}
+#        WS_OSM_DB_USER: ${WS_OSM_DB_USER}
+#        WS_OSM_DB_PASS: ${WS_OSM_DB_PASS}
+#        WS_OSM_DB_NAME: ${WS_OSM_DB_NAME}
+
       cache_from:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-osm-rails:buildcache
       cache_to:
@@ -135,25 +139,6 @@ services:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
   # tasking manager
-  # tasks-frontend:
-  #   image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${ENV}
-  #   build:
-  #     cache_from:
-  #       - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache
-  #     cache_to:
-  #       - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:buildcache,mode=max
-  #     context: tasking-manager
-  #     dockerfile: ./scripts/docker/Dockerfile.frontend
-  #     args:
-  #       TM_APP_API_URL: ${WS_TASKS_URL}
-  #       #TM_CONSUMER_KEY
-  #       #TM_CONSUMER_SECRET
-
-  # tasks-frontend_tag:
-  #   extends: tasks-frontend
-  #   image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-frontend:${CODE_VERSION}
-
-  # tasking manager
   tasks-backend:
     image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}
     build:
@@ -177,6 +162,8 @@ services:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:buildcache,mode=max
       context: ./leaderboard/frontend
       dockerfile: Dockerfile
+      
+      # these get baked into the JavaScript at build time--so ARGS not ENVS
       args:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
         VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
