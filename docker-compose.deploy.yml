@@ -1,3 +1,9 @@
+#
+# This file is only used by the CI/CD pipeline to deploy images to the environment's VM.
+#
+# For any local dev work, see docker-compose.yml and *overrides.yml. 
+#
+
 ################################################################################
 
 x-osm-rails-base:

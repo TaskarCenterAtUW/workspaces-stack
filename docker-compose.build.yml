@@ -1,3 +1,9 @@
+#
+# This file is only used by the CI/CD pipeline to build/push images to Azure CR.
+#
+# For any local dev work, see docker-compose.yml and *overrides.yml. 
+#
+
 services:
   # workspaces FE (Vue app)
   frontend:
@@ -9,7 +15,10 @@ services:
       cache_to:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-frontend:buildcache,mode=max
 
-      # these get baked into the JavaScript at build time--so ARGS not ENVS
+      # WARNING: these get baked into the JavaScript at build time--so ARGS not ENVS
+      #
+      # NB: this also makes images environment-specific! (FIXME?)
+      #
       args:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
         VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
@@ -86,6 +95,10 @@ services:
   # OSM website/OSM API
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
+    
+# These have been commented out so as not to embed these variables in the images themselves
+# DO NOT CHANGE THIS PLEASE.
+#
 #    environment:
 #        RAILS_ENV: production
 #        SECRET_KEY_BASE: ${WS_OSM_SECRET_KEY_BASE}
@@ -163,7 +176,10 @@ services:
       context: ./leaderboard/frontend
       dockerfile: Dockerfile
       
-      # these get baked into the JavaScript at build time--so ARGS not ENVS
+      # WARNING: these get baked into the JavaScript at build time--so ARGS not ENVS
+      #
+      # NB: this also makes images environment-specific! (FIXME?)
+      #
       args:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
         VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
