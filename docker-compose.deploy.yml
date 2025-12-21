@@ -1,7 +1,7 @@
 #
 # This file is only used by the CI/CD pipeline to deploy images to the environment's VM.
 #
-# For any local dev work, see docker-compose.yml and *overrides.yml. 
+# For any local dev work, see docker-compose.yml and *overrides.yml.
 #
 
 ################################################################################
@@ -142,6 +142,8 @@ services:
     depends_on:
       - osm-rails
       - osm-cgimap
+    sysctls:
+      net.core.somaxconn: 4096
     labels:
       - traefik.enable=true
       - traefik.http.routers.osm-web.rule=Host(`${WS_OSM_HOST}`)
@@ -160,6 +162,9 @@ services:
   osm-cgimap:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${WS_DOCKER_TAG}
     restart: always
+    sysctls:
+      net.core.somaxconn: 4096
+      net.ipv4.tcp_max_syn_backlog: 4096
     environment:
       CGIMAP_INSTANCES: ${WS_CGIMAP_INSTANCES}
       CGIMAP_HOST: ${WS_OSM_DB_HOST}
