@@ -9,24 +9,54 @@
 # ...and adjust services below as needed. The examples shown below are not
 # exhaustive.
 #
+# Some sections of this file facilitate alignment of users and groups when
+# mounting code as container volumes. These values first read from the UID
+# and GID environment variables if available and fall back to "501" as the
+# sensible default for MacOS contributors (the folks that will most likely
+# need to override user/group here). Linux users typically have a UID=1000
+# and GID=1000. Since these are image defaults, we do not need to override
+# these unless we're using a system where our account doesn't have UID/GID
+# of 1000.
+#
+# To assign the UID and GID environment variables automatically, run:
+#
+#   export UID=$(id -u) GID=$(id -g)
+#
+# Add the above command to a profile script to avoid the need to run it in
+# every session. Some shells set these variables in the scope of the shell
+# process (not the environment). We still need to export the values to the
+# environment to access those here. For example, Bash sets UID, and we can
+# export it directly:
+#
+#   export UID GID=$(id -g)
+#
+# Alternatively, add the UID and GID variables to your .env file.
+#
 
 name: tdei-workspaces
 
+x-node-dev-base:
+  &node-dev-base
+  # Build the container so that the runtime user matches the local user.
+  build:
+    args:
+      APP_UID: ${UID:-501}
+      APP_GID: ${GID:-501}
+  # Run the container as your local user so that file permissions match.
+  user: "${UID:-501}:${GID:-501}"
+
 services:
   frontend:
-    # Run the container as your local user so that file permissions match.
-    #
-    # The default UID for MacOS is typically 501. For Linux, this is typically
-    # 1000. Run `id -u` to confirm.
-    #
-    user: 501
+    <<: *node-dev-base
+
+  rapid:
+    <<: *node-dev-base
+
+  pathways-editor:
+    <<: *node-dev-base
 
   tasks-backend:
-    # Build the container as your local user so that file permissions match.
-    #
-    # The default UID for MacOS is typically 501. For Linux, this is typically
-    # 1000. Run `id -u` to confirm.
-    #
+    # Build the container as your local user so that permissions match.
     build:
       args:
-        APP_UID: 501
+        APP_UID: ${UID:-501}

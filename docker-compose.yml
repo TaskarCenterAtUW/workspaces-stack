@@ -24,6 +24,13 @@ x-osm-rails-base:
     - osm-rails-tmp:/app/tmp
     - osm-rails-storage:/app/storage
 
+x-node-dev-base:
+  &node-dev-base
+  build:
+    context: node-dev
+  working_dir: /app
+  tty: true
+
 ################################################################################
 
 services:
@@ -40,12 +47,8 @@ services:
       - --providers.docker.exposedbydefault=false
 
   frontend:
-    image: node:latest
-    entrypoint: npm
+    <<: *node-dev-base
     command: run dev
-    user: node
-    working_dir: /app
-    tty: true
     environment:
       VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
       VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
@@ -69,12 +72,8 @@ services:
     # the tasks-backend service below.
 
   rapid:
-    image: node:latest
-    entrypoint: npm
+    <<: *node-dev-base
     command: run start
-    user: node
-    working_dir: /app
-    tty: true
     volumes:
       - ./rapid:/app
     labels:
@@ -88,12 +87,8 @@ services:
       - traefik.http.services.rapid.loadbalancer.server.port=8080
 
   pathways-editor:
-    image: node:latest
-    entrypoint: npm
+    <<: *node-dev-base
     command: run start
-    user: node
-    working_dir: /app
-    tty: true
     volumes:
       - ./pathways-editor:/app
     labels:
