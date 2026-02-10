@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: 'Environment'     
+        description: 'Environment'
         default: 'dev'
         type: choice
         options:
@@ -12,22 +12,22 @@ on:
           - 'prod'
 
       build_flag:
-        description: 'Docker Build Flags'     
+        description: 'Docker Build Flags'
         default: ''
         type: choice
         options:
           - ''
           - '--no-cache'
 
-run-name: Release for ${{github.event.inputs.env}}  
+run-name: Release for ${{github.event.inputs.env}}
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     concurrency:
       group: deploy
       cancel-in-progress: false
     name: Build, Push, Deploy
-    environment: ${{github.event.inputs.env}}  
+    environment: ${{github.event.inputs.env}}
     timeout-minutes: 30
     steps:
         - uses: actions/checkout@v2
@@ -39,7 +39,16 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-frontend
                  path: frontend
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd frontend; echo FRONTEND_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd frontend; echo FRONTEND_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
+
+        # api submod
+        - name: Checkout api
+          uses: actions/checkout@v2
+          with:
+                 repository: TaskarCenterAtUW/workspaces-backend
+                 path: api
+                 ref: refs/tags/${{github.event.inputs.env}}
+        - run: cd api; echo API_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
 
         # osm-cgimap submod
         - name: Checkout osm-cgimap
@@ -48,7 +57,7 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-cgimap
                  path: osm-cgimap
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd osm-cgimap; echo CGIMAP_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd osm-cgimap; echo CGIMAP_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
 
         # osm-rails submod
         - name: Checkout osm-rails
@@ -57,7 +66,7 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-openstreetmap-website
                  path: osm-rails
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd osm-rails; echo OSMRAILS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd osm-rails; echo OSMRAILS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
 
         # pathways submod
         - name: Checkout pathways-editor
@@ -66,7 +75,7 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-pathways-editor
                  path: pathways-editor
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd pathways-editor; echo PATHWAYS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd pathways-editor; echo PATHWAYS_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
 
         # rapid submod
         - name: Checkout rapid
@@ -75,7 +84,7 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-rapid
                  path: rapid
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd rapid; echo RAPID_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd rapid; echo RAPID_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
 
         # tasking-manager submod
         - name: Checkout tasking-manager
@@ -84,7 +93,7 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-tasking-manager
                  path: tasking-manager
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd tasking-manager; echo TM_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd tasking-manager; echo TM_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
 
 
         # leaderboard submod
@@ -94,7 +103,7 @@ jobs:
                  repository: TaskarCenterAtUW/workspaces-leaderboard
                  path: leaderboard
                  ref: refs/tags/${{github.event.inputs.env}}
-        - run: cd leaderboard; echo LB_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"                                                                                                                   
+        - run: cd leaderboard; echo LB_VERSION=`/usr/bin/git log -1 --format='%h'` >> "$GITHUB_ENV"
 
 
         - uses: docker/login-action@v3
@@ -106,7 +115,7 @@ jobs:
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
 
-        # see tdei_uw.env for why 
+        # see tdei_uw.env for why
         - name: Override ENV_NAME_PARAM for prod deployments
           if: github.event.inputs.env == 'prod'
           run: echo "ENV_NAME_PARAM=" >> "$GITHUB_ENV"
@@ -114,16 +123,16 @@ jobs:
           if: github.event.inputs.env != 'prod'
           env:
               ENV: ${{ vars.ENV }}
-          run: echo "ENV_NAME_PARAM=-${ENV}" >> "$GITHUB_ENV"                                                                                                                   
-                                   
+          run: echo "ENV_NAME_PARAM=-${ENV}" >> "$GITHUB_ENV"
+
         - name: Build and push
           run: |
-              docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}} 
-              docker compose -f docker-compose.build.yml --env-file tdei_uw.env push 
-              
+              docker compose -f docker-compose.build.yml --env-file tdei_uw.env build --build-arg CODE_VERSION=${CODE_VERSION} ${{github.event.inputs.build_flag}}
+              docker compose -f docker-compose.build.yml --env-file tdei_uw.env push
+
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.API_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
               # hosts
@@ -142,14 +151,14 @@ jobs:
         - name: Deploy
           env:
               ENV: ${{ vars.ENV }}
-              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
+              CODE_VERSION: "${{ env.FRONTEND_VERSION }}-${{ env.API_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
               ENV_NAME_PARAM: ${{ env.ENV_NAME_PARAM }}
 
-              # machine to deploy to 
+              # machine to deploy to
               AZURE_DOCKER_HOST_IP: ${{ vars.AZURE_DOCKER_HOST_IP }}
 
               # tag to deploy
-              WS_DOCKER_TAG: "${{ env.FRONTEND_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
+              WS_DOCKER_TAG: "${{ env.FRONTEND_VERSION }}-${{ env.API_VERSION }}-${{ env.CGIMAP_VERSION }}-${{ env.OSMRAILS_VERSION }}-${{ env.PATHWAYS_VERSION }}-${{ env.RAPID_VERSION }}-${{ env.TM_VERSION }}-${{ env.LB_VERSION }}"
 
               # hosts
               WS_DOCKER_REGISTRY: ${{ vars.WS_DOCKER_REGISTRY }}
@@ -172,7 +181,7 @@ jobs:
 
               echo "${{ secrets.GH_ACTIONS_SSH_KEY }}" > ~/.ssh/github_actions
               chmod 600 ~/.ssh/github_actions
-              ssh-add ~/.ssh/github_actions		  
+              ssh-add ~/.ssh/github_actions
 
               echo Configuring docker context
               docker context create ${{ vars.ENV }} --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
@@ -184,11 +193,10 @@ jobs:
 
               # pull new images, recreate containers
               docker compose -f docker-compose.deploy.yml --env-file tdei_uw.env up -d --force-recreate --remove-orphans
-              
+
               # check what was deployed, just to save in the GH logs
               echo Waiting for deployment to complete
-              sleep 30s 
+              sleep 30s
 
               echo Deploy list
-              docker ps               
-       
+              docker ps

@@ -5,6 +5,7 @@
 # Run as ./checkout-repos.sh <tag name> e.g. ./checkout-repos.sh dev
 #
 
+git clone --depth 1 --branch $1 https://github.com/TaskarCenterAtUW/workspaces-backend.git api
 git clone --depth 1 --branch $1 https://github.com/TaskarCenterAtUW/workspaces-frontend.git frontend
 git clone --depth 1 --branch $1 https://github.com/TaskarCenterAtUW/workspaces-cgimap.git osm-cgimap
 git clone --depth 1 --branch $1 https://github.com/TaskarCenterAtUW/workspaces-openstreetmap-website.git osm-rails

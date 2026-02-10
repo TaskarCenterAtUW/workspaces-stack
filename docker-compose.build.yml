@@ -1,7 +1,7 @@
 #
 # This file is only used by the CI/CD pipeline to build/push images to Azure CR.
 #
-# For any local dev work, see docker-compose.yml and *overrides.yml. 
+# For any local dev work, see docker-compose.yml and *overrides.yml.
 #
 
 services:
@@ -23,6 +23,7 @@ services:
         VITE_TDEI_API_URL: ${WS_TDEI_API_URL}
         VITE_TDEI_USER_API_URL: ${WS_TDEI_BACKEND_URL}
         VITE_API_URL: ${WS_API_URL}
+        VITE_NEW_API_URL: ${WS_NEW_API_URL}
         VITE_OSM_URL: ${WS_OSM_URL}
         VITE_RAPID_URL: ${WS_RAPID_URL}
         VITE_PATHWAYS_EDITOR_URL: ${WS_PATHWAYS_EDITOR_URL}
@@ -35,6 +36,15 @@ services:
   frontend_tag:
     extends: frontend
     image: ${WS_DOCKER_REGISTRY}/workspaces-frontend:${CODE_VERSION}
+
+  api:
+    image: ${WS_DOCKER_REGISTRY}/workspaces-api:${ENV}
+    build:
+      context: api
+
+  api_tag:
+    extends: api
+    image: ${WS_DOCKER_REGISTRY}/workspaces-api:${CODE_VERSION}
 
   # rapid editor
   rapid:
@@ -95,7 +105,7 @@ services:
   # OSM website/OSM API
   osm-rails:
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-rails:${ENV}
-    
+
 # These have been commented out so as not to embed these variables in the images themselves
 # DO NOT CHANGE THIS PLEASE.
 #
@@ -175,7 +185,7 @@ services:
         - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-leaderboard-frontend:buildcache,mode=max
       context: ./leaderboard/frontend
       dockerfile: Dockerfile
-      
+
       # WARNING: these get baked into the JavaScript at build time--so ARGS not ENVS
       #
       # NB: this also makes images environment-specific! (FIXME?)

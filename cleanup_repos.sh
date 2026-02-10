@@ -7,3 +7,4 @@ rm -rf osm-rails/
 rm -rf osm-cgimap/
 rm -rf leaderboard/
 rm -rf frontend/
+rm -rf api/

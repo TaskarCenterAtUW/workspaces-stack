@@ -5,6 +5,7 @@ dev.env
 stage.env
 prod.env
 
+api/
 frontend/
 leaderboard/
 osm-cgimap/
