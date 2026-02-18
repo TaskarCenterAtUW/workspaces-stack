@@ -86,6 +86,9 @@ services:
       PROJECT_NAME: ${WS_PLATFORM_NAME}
       OSM_DATABASE_URL: ${WS_OSM_DB_URI}
       TASK_DATABASE_URL: ${WS_TASKS_DB_URI}
+      TDEI_BACKEND_URL: ${WS_TDEI_BACKEND_URL}
+      TDEI_OIDC_URL: ${WS_TDEI_OIDC_URL}
+      TDEI_OIDC_REALM: ${WS_TDEI_OIDC_REALM}
       SENTRY_DSN: ${WS_API_SENTRY_DSN}
     labels:
       - traefik.enable=true
