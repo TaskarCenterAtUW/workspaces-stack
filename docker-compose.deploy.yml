@@ -91,6 +91,8 @@ services:
       TDEI_OIDC_URL: ${WS_TDEI_OIDC_URL}
       TDEI_OIDC_REALM: ${WS_TDEI_OIDC_REALM}
       SENTRY_DSN: ${WS_API_SENTRY_DSN}
+      LONGFORM_SCHEMA_URL: ${WS_LONG_FORM_QUEST_SCHEMA_URL}
+      IMAGERY_SCHEMA_URL: ${WS_IMAGERY_SCHEMA_URL}
     labels:
       - traefik.enable=true
       - traefik.http.routers.api.rule=Host(`${WS_NEW_API_HOST}`)
