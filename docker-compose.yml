@@ -80,6 +80,7 @@ services:
       context: api
     environment:
       PROJECT_NAME: ${WS_PLATFORM_NAME}
+      CORS_ORIGINS: ${WS_API_CORS_ORIGINS}
       OSM_DATABASE_URL: ${WS_OSM_DB_URI}
       TASK_DATABASE_URL: ${WS_TASKS_DB_URI}
       TDEI_BACKEND_URL: ${WS_TDEI_BACKEND_URL}
@@ -91,7 +92,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.api.rule=Host(`${WS_NEW_API_HOST}`)
-      - traefik.http.routers.api.middlewares=cors
       - traefik.http.services.api.loadbalancer.server.port=8000
 
   rapid:
