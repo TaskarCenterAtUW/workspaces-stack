@@ -45,6 +45,7 @@ services:
       # The Vite dev server produces bundles with encoded paths:
       - --entrypoints.web.http.encodedCharacters.allowEncodedSlash=true
       - --api.insecure=true
+      - --log.level=INFO
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
     labels:
