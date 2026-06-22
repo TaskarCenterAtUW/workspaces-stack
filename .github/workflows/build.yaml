@@ -187,6 +187,9 @@ jobs:
               docker context create ${{ vars.ENV }} --docker "host=ssh://github-actions@${{ vars.AZURE_DOCKER_HOST_IP }}"
               docker context use ${{ vars.ENV }}
 
+              echo Logging into Azure docker registry
+              echo "${{ secrets.AZURE_REGISTRY_PASSWORD }}" | docker login ${{ vars.WS_DOCKER_REGISTRY }} -u ${{ secrets.AZURE_REGISTRY_USERNAME }} --password-stdin
+
               # remove images no longer in use--may need disk space to pull
               echo Pruning old docker images
               docker image prune -a -f
