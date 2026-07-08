@@ -95,7 +95,7 @@ services:
       IMAGERY_SCHEMA_URL: ${WS_IMAGERY_SCHEMA_URL}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.api.rule=Host(`${WS_NEW_API_HOST}`)
+      - traefik.http.routers.api.rule=Host(`${WS_NEW_API_HOST}`, `${WS_API_HOST}`)
       - traefik.http.services.api.loadbalancer.server.port=8000
       - traefik.http.routers.api.entrypoints=websecure
       - traefik.http.routers.api.tls.certresolver=myresolver
