@@ -162,19 +162,20 @@ services:
     extends: osm-cgimap
     image: ${WS_DOCKER_REGISTRY}/workspaces-osm-cgimap:${CODE_VERSION}
 
-  # tasking manager
-  tasks-backend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}
-    build:
-      cache_from:
-        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:buildcache
-      cache_to:
-        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:buildcache,mode=max
-      context: tasking-manager
+# DEPRECATED IN PLACE OF NEW API
+#  # tasking manager
+#  tasks-backend:
+#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${ENV}
+#    build:
+#      cache_from:
+#        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:buildcache
+#      cache_to:
+#        - type=registry,ref=${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:buildcache,mode=max
+#      context: tasking-manager
 
-  tasks-backend_tag:
-    extends: tasks-backend
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
+#  tasks-backend_tag:
+#    extends: tasks-backend
+#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${CODE_VERSION}
 
   # leaderboard FE/backend
   leaderboard-frontend:
