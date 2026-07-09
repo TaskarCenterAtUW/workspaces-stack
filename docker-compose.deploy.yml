@@ -154,8 +154,8 @@ services:
       - osm-cgimap
     sysctls:
       net.core.somaxconn: 4096
-    labels:
 # PROXIED VIA API CONTAINER
+#    labels:
 #      - traefik.enable=true
 #      - traefik.http.routers.osm-web.rule=Host(`${WS_OSM_HOST}`)
 #      - traefik.http.services.osm-web.loadbalancer.server.port=80
