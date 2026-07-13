@@ -95,32 +95,32 @@ services:
       IMAGERY_SCHEMA_URL: ${WS_IMAGERY_SCHEMA_URL}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.api.rule=Host(`${WS_NEW_API_HOST}`)
+      - traefik.http.routers.api.rule=Host(`${WS_NEW_API_HOST}`) || Host(`${WS_API_HOST}`) || Host(`${WS_OSM_HOST}`)
       - traefik.http.services.api.loadbalancer.server.port=8000
       - traefik.http.routers.api.entrypoints=websecure
       - traefik.http.routers.api.tls.certresolver=myresolver
 
-  # Legacy tasking manager as workspaces API
-  backend:
-    # Workspaces backend currently lives in the TM. Emulate a separate server for now:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
-    restart: always
-    env_file: tasking-manager/tasking-manager.env
-    environment:
-      GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
-      WS_LONGFORM_SCHEMA_URL: ${WS_LONG_FORM_QUEST_SCHEMA_URL}
-      WS_IMAGERY_SCHEMA_URL: ${WS_IMAGERY_SCHEMA_URL}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.workspaces-backend.rule=Host(`${WS_API_HOST}`)
-      - traefik.http.services.workspaces-backend.loadbalancer.server.port=5000
+#  # Legacy tasking manager as workspaces API
+#  backend:
+#    # Workspaces backend currently lives in the TM. Emulate a separate server for now:
+#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+#    restart: always
+#    env_file: tasking-manager/tasking-manager.env
+#    environment:
+#      GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
+#      WS_LONGFORM_SCHEMA_URL: ${WS_LONG_FORM_QUEST_SCHEMA_URL}
+#      WS_IMAGERY_SCHEMA_URL: ${WS_IMAGERY_SCHEMA_URL}
+#    labels:
+#      - traefik.enable=true
+#      - traefik.http.routers.workspaces-backend.rule=Host(`${WS_API_HOST}`)
+#      - traefik.http.services.workspaces-backend.loadbalancer.server.port=5000
 
-      - traefik.http.middlewares.redirect-to-https.replacepathregex.regex=^/api/v1/(.*)
-      - traefik.http.middlewares.redirect-to-https.replacepathregex.replacement=/api/v1/$$1/
+#      - traefik.http.middlewares.redirect-to-https.replacepathregex.regex=^/api/v1/(.*)
+#      - traefik.http.middlewares.redirect-to-https.replacepathregex.replacement=/api/v1/$$1/
 
-      - traefik.http.routers.workspaces-backend.middlewares=cors,redirect-to-https
-      - traefik.http.routers.workspaces-backend.entrypoints=websecure
-      - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
+#      - traefik.http.routers.workspaces-backend.middlewares=cors,redirect-to-https
+#      - traefik.http.routers.workspaces-backend.entrypoints=websecure
+#      - traefik.http.routers.workspaces-backend.tls.certresolver=myresolver
 
   # workspaces editors
   rapid:
@@ -154,12 +154,13 @@ services:
       - osm-cgimap
     sysctls:
       net.core.somaxconn: 4096
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.osm-web.rule=Host(`${WS_OSM_HOST}`)
-      - traefik.http.services.osm-web.loadbalancer.server.port=80
-      - traefik.http.routers.osm-web.entrypoints=websecure
-      - traefik.http.routers.osm-web.tls.certresolver=myresolver
+# PROXIED VIA API CONTAINER
+#    labels:
+#      - traefik.enable=true
+#      - traefik.http.routers.osm-web.rule=Host(`${WS_OSM_HOST}`)
+#      - traefik.http.services.osm-web.loadbalancer.server.port=80
+#      - traefik.http.routers.osm-web.entrypoints=websecure
+#      - traefik.http.routers.osm-web.tls.certresolver=myresolver
 
   osm-rails:
     <<: *osm-rails-base
@@ -186,18 +187,18 @@ services:
       CGIMAP_MAP_NODES: ${WS_OSM_MAX_EXPORT_NODES}
       CGIMAP_MAP_AREA: ${WS_OSM_MAX_EXPORT_AREA}
 
-  tasks-backend:
-    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
-    restart: always
-    env_file: tasking-manager/tasking-manager.env
-    environment:
-      GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.tasks-backend.rule=Host(`${WS_TASKS_HOST}`) && PathPrefix(`/api/`)
-      - traefik.http.services.tasks-backend.loadbalancer.server.port=5000
-      - traefik.http.routers.tasks-backend.entrypoints=websecure
-      - traefik.http.routers.tasks-backend.tls.certresolver=myresolver
+#  tasks-backend:
+#    image: ${WS_DOCKER_REGISTRY}/workspaces-tasks-backend:${WS_DOCKER_TAG}
+#    restart: always
+#    env_file: tasking-manager/tasking-manager.env
+#    environment:
+#      GUNICORN_CMD_ARGS: "--workers 5 --threads 5 --timeout 179"
+#    labels:
+#      - traefik.enable=true
+#      - traefik.http.routers.tasks-backend.rule=Host(`${WS_TASKS_HOST}`) && PathPrefix(`/api/`)
+#      - traefik.http.services.tasks-backend.loadbalancer.server.port=5000
+#      - traefik.http.routers.tasks-backend.entrypoints=websecure
+#      - traefik.http.routers.tasks-backend.tls.certresolver=myresolver
 
   # leaderboard FE/backend
   leaderboard-frontend:
